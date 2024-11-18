@@ -7,10 +7,6 @@
   set enum(numbering: "1.a)")
   show link: underline
 
-  // Set paragraph spacing.
-  show par: set block(above: 1.2em, below: 1.2em)
-
-
   set par(leading: 0.75em)
 
   // Title row.
