@@ -1,12 +1,15 @@
 # CS546-Final-Project
+
 Final Project for CS546 - Web Programming I.
 
 ## Team Members
+
 - Alice Zaytseva
 - Marcos Traverso
 - Keona Hicks
 
 ## Running the Project
+
 1. Clone the repository to your local machine:
     ```bash
    git clone https://github.com/mtraverso3/CS546-Final-Project
@@ -29,6 +32,12 @@ Final Project for CS546 - Web Programming I.
     ```
 6. Navigate to `http://localhost:3000/` in your web browser to view the project.
 
+## Testing the Project
+
+See the [Testing README](test/TESTING.md) in the `test` directory for information on running the test cases.
+
 ## Project Planning
+
 ### Project Timeline
+
 https://docs.google.com/spreadsheets/d/1Ubw4RMAkWNqPZsktn4pjJeweNvnH6CQ2UucuN3HelcE/edit?usp=sharing
