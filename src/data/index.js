@@ -1,5 +1,7 @@
-import mediaDataFunctions from "./media.js";
+import videoDataFunctions from "./videos.js";
 import userDataFunctions from "./users.js";
+import commentsFunctions from "./comments.js";
 
 export const userData = userDataFunctions;
-export const postData = mediaDataFunctions;
+export const videoData = videoDataFunctions;
+export const commentsData = commentsFunctions;
