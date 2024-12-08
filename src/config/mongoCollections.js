@@ -16,5 +16,7 @@ const getCollectionFn = (collection) => {
 };
 
 /* Now, you can list your collections here: */
-export const media = getCollectionFn("media");
+export const videos = getCollectionFn("videos");
 export const users = getCollectionFn("users");
+export const comments = getCollectionFn("comments");
+export const videoRatings = getCollectionFn("videoRatings");
