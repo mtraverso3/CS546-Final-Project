@@ -41,3 +41,7 @@ See the [Testing README](test/TESTING.md) in the `test` directory for informatio
 ### Project Timeline
 
 https://docs.google.com/spreadsheets/d/1Ubw4RMAkWNqPZsktn4pjJeweNvnH6CQ2UucuN3HelcE/edit?usp=sharing
+
+### Website Outline
+
+https://docs.google.com/document/d/1FZ8ymQuDeBE3yZkiPjvTajL-8k9_wKZPbyluaKkcdhg/edit?usp=sharing
