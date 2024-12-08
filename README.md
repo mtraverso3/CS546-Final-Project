@@ -45,3 +45,7 @@ https://docs.google.com/spreadsheets/d/1Ubw4RMAkWNqPZsktn4pjJeweNvnH6CQ2UucuN3He
 ### Website Outline
 
 https://docs.google.com/document/d/1FZ8ymQuDeBE3yZkiPjvTajL-8k9_wKZPbyluaKkcdhg/edit?usp=sharing
+
+### Webpage Layout
+
+https://drive.google.com/file/d/1g3sNiNW0Mkjbuglv9RM7JpoJ5zKLEUkO/view?usp=sharing
