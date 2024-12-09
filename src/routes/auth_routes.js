@@ -1,4 +1,4 @@
-import e, { Router } from "express";
+import e, { Router } from 'express';
 const router = Router();
 import { users, videos } from "../config/mongoCollections.js";
 import bcrypt from "bcrypt";

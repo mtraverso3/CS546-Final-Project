@@ -5,7 +5,7 @@ const exportedMethods = {
   async getVideoById(id) {
     //TODO: verify this
     id = validation.checkId(id);
-    const videoCollection = await video();
+    const videoCollection = await videos();
     const video = await videoCollection.findOne({ _id: id });
     if (!video) throw new Error("Video not found");
     return video;
