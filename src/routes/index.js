@@ -1,8 +1,9 @@
 // import exampleRoutes from './examples.js';
 import { static as staticDir } from "express";
+import authRoutes from './auth_routes.js';
 
 const constructorMethod = (app) => {
-  // app.use('/examples', exampleRoutes);
+  app.use('/', authRoutes);
 
   app.use("/public", staticDir("src/public"));
   app.use("*", (req, res) => {
