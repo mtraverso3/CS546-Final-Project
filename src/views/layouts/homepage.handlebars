@@ -1,0 +1,82 @@
+<div class="app-container">
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-section">
+            <a href="/" class="sidebar-item active">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 12l9-9 9 9M5 10v10h14V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Home
+            </a>
+            <a href="/following" class="sidebar-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Following
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-heading">You</h3>
+            <a href="/profile" class="sidebar-item">Your Channel</a>
+            <a href="/playlists" class="sidebar-item">Playlists</a>
+            <a href="/liked" class="sidebar-item">Liked Videos</a>
+            <a href="/comments" class="sidebar-item">Your Comments</a>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-heading">Subscriptions</h3>
+            <div class="subscription-list">
+                <!-- Placeholder subscriptions -->
+                <a href="#" class="subscription-item">
+                    <div class="subscription-avatar">TC</div>
+                    <span>TechChannel</span>
+                </a>
+                <a href="#" class="subscription-item">
+                    <div class="subscription-avatar">GD</div>
+                    <span>GameDev</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="video-grid">
+            <!-- Video Card Template -->
+            {{#each videos}}
+            <article class="video-card">
+                <div class="thumbnail-container">
+                    <img src="{{thumbnailUrl}}" alt="{{title}}" class="video-thumbnail">
+                    <span class="video-duration">{{duration}}</span>
+                </div>
+                <div class="video-info">
+                    <div class="channel-avatar">{{channelInitial}}</div>
+                    <div class="video-details">
+                        <h3 class="video-title">{{title}}</h3>
+                        <a href="/channel/{{channelId}}" class="channel-name">{{channelName}}</a>
+                        <div class="video-meta">
+                            <span>{{views}} views</span>
+                            <span>{{likes}} likes</span>
+                            <span>{{publishedAt}}</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {{/each}}
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="page-btn" disabled>Previous</button>
+            <div class="page-numbers">
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <span>...</span>
+                <button class="page-btn">10</button>
+            </div>
+            <button class="page-btn">Next</button>
+        </div>
+    </main>
+</div>
