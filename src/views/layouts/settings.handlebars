@@ -101,10 +101,10 @@
                             <label class="checkbox-label">
                                 <input 
                                     type="checkbox" 
-                                    name="showSubscriptions"
-                                    {{#if user.showSubscriptions}}checked{{/if}}
+                                    name="profilePublic"
+                                    {{#if user.visibility.profile_public}}checked{{/if}}
                                 />
-                                <span>Show my subscriptions to other users</span>
+                                <span>Show my profile other users</span>
                             </label>
                         </div>
 
@@ -112,10 +112,21 @@
                             <label class="checkbox-label">
                                 <input 
                                     type="checkbox" 
-                                    name="showLikedVideos"
-                                    {{#if user.showLikedVideos}}checked{{/if}}
+                                    name="emailPublic"
+                                    {{#if user.visibility.email_public}}checked{{/if}}
                                 />
-                                <span>Show my liked videos to other users</span>
+                                <span><span>Show my email to other users</span></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input 
+                                    type="checkbox" 
+                                    name="namePublic"
+                                    {{#if user.visibility.name_public}}checked{{/if}}
+                                />
+                                <span>Show my name videos to other users</span>
                             </label>
                         </div>
 
