@@ -97,6 +97,35 @@ const exportedMethods = {
 
     return email;
   },
+  checkUserId (userId) {
+    userId = validateString(userId)
+    if(userId.length > 10 || userId.length < 5){
+        throw "UserID must be between 5 - 10 characters"
+    }
+    return userId
+  },
+  checkPassword(password) {
+    password = validateString(password)
+    if(password.length < 8){
+        throw "Password must be at least 8 characters long"
+    }
+    let regex1 = /[A-Z]/
+    let regex2 = /[^A-Za-z0-9]/
+    let regex3 = /\d/
+    if(!regex1.test(password)){
+        throw "Password must have at least 1 Uppercase letter"
+    }
+    if(!regex2.test(password)){
+        throw "Password must contain at least 1 special character"
+    }
+    if(!regex3.test(password)){
+        throw "Password must have at least 1 number"
+    }
+    return password
+    
+  }
 };
+
+
 
 export default exportedMethods;

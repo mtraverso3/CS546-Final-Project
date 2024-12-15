@@ -161,6 +161,41 @@ const exportedMethods = {
     }
     return await this.getUserById(id.toString());
   },
+  async signUpUser (
+    firstName,
+    lastName,
+    email,
+    username,
+    password,
+    age,
+    profilePicture,
+  ) {
+    let newUser = this.createUser(firstName, lastName, email, username, password, age, profilePicture)
+    return {registrationCompleted: true}
+
+  },
+  
+  async signInUser (userId, password) {
+    userId = validation.checkUserId(userId)
+    userId = userId.toLowerCase()
+    password = validation.checkPassword(password)
+    const userCollection = await users();
+    const user = await userCollection.findOne({userId: userId});
+    if(user === null){
+      throw "Either the userId or password is invalid"
+    }
+    let hash = user.password
+    let matched = await bcrypt.compare(password, hash);
+    if(!matched){
+      throw "Either the userId or password is invalid"
+    }
+    return {firstName: user.firstName, 
+            lastName: user.lastName, 
+            email: user.email, 
+            username: user.username, 
+            age: user.age, 
+            profilePicture: user.profilePicture}
+  }
 };
 
 export default exportedMethods;
