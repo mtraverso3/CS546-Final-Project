@@ -39,7 +39,7 @@ router
     if (req.session && req.session.AuthenticationState) {
       res.redirect('/homepage');
     } else {
-      res.render('sign_up_layout');
+      res.render('sign_up');
     }
   })
 
