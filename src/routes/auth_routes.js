@@ -100,7 +100,6 @@ router
 
     try {
       user.age = 18;
-      user.profilePicture = "N/A";
       console.log("creating user...");
       const { registrationCompleted } = await userData.signUpUser(
         user.firstName,
@@ -109,7 +108,6 @@ router
         user.userId,
         user.password,
         user.age,
-        user.profilePicture,
       );
       if (registrationCompleted) {
         return res.redirect("/intro");
@@ -139,10 +137,14 @@ router
   .post(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
       const v = await getAllVideosMatching(req.body.search);
+      console.log(req.session.AuthenticationState.user)
+      let user = req.session.AuthenticationState.user
+      let initials = user.firstName[0] + user.lastName[0]
 
       res.render("homepage", {
         user: req.session.AuthenticationState.user,
         videos: v,
+        initials: initials
       });
     } else {
       return res.status(401).redirect("/intro");
@@ -150,7 +152,10 @@ router
   })
   .get(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
-      res.render("homepage", { user: req.session.AuthenticationState.user });
+      console.log(req.session.AuthenticationState.user)
+      let user = req.session.AuthenticationState.user
+      let initials = user.firstName[0] + user.lastName[0]
+      res.render("homepage", { user: req.session.AuthenticationState.user, initials: initials });
     } else {
       return res.status(401).redirect("/intro");
     }
@@ -161,11 +166,14 @@ router.route("/homepage").get(async (req, res) => {
 
     try {
         const v = await videoData.getAllVideos();
-
-      res.render("homepage", {
-        user: req.session.AuthenticationState.user,
-        videos: v,
-      });
+        console.log(req.session.AuthenticationState.user)
+        let user = req.session.AuthenticationState.user
+        let initials = user.firstName[0] + user.lastName[0]
+        res.render("homepage", {
+          user: req.session.AuthenticationState.user,
+          initials: initials,
+          videos: v,
+        });
     } catch (e) {
         console.log(e);
         return res.status(500).redirect("/intro");
@@ -179,7 +187,10 @@ router.route("/homepage").get(async (req, res) => {
 
 router.route("/profile").get(async (req, res) => {
   if (req.session && req.session.AuthenticationState) {
-    res.render("profile", { user: req.session.AuthenticationState.user });
+    console.log(req.session.AuthenticationState.user)
+    let user = req.session.AuthenticationState.user
+    let initials = user.firstName[0] + user.lastName[0]
+    res.render("profile", { user: req.session.AuthenticationState.user, initials: initials });
   } else {
     return res.status(401).redirect("/intro");
   }
@@ -189,8 +200,12 @@ router
   .route("/settings")
   .get(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
+      console.log(req.session.AuthenticationState.user)
+      let user = req.session.AuthenticationState.user
+      let initials = user.firstName[0] + user.lastName[0]
       return res.render("settings", {
         user: req.session.AuthenticationState.user,
+        initials: initials
       });
     } else {
       return res.status(401).redirect("/intro");
@@ -199,7 +214,10 @@ router
   .post(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
       users.updateUserPatch(req.session.AuthenticationState.user._id, req.body);
-      res.render("settings", { user: req.session.AuthenticationState.user });
+      console.log(req.session.AuthenticationState.user)
+      let user = req.session.AuthenticationState.user
+      let initials = user.firstName[0] + user.lastName[0]
+      res.render("settings", { user: req.session.AuthenticationState.user, initials: initials });
     } else {
       return res.status(401).redirect("/intro");
     }

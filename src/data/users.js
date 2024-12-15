@@ -22,7 +22,6 @@ const exportedMethods = {
     username,
     password,
     age,
-    profilePicture,
   ) {
     firstName = validation.checkString(firstName, "First Name");
     lastName = validation.checkString(lastName, "Last Name");
@@ -34,7 +33,6 @@ const exportedMethods = {
       min: 0,
       max: 120,
     });
-    profilePicture = validation.checkString(profilePicture, "Profile Picture");
 
     password = await bcrypt.hash(password, bcryptConfig.saltRounds);
 
@@ -51,7 +49,6 @@ const exportedMethods = {
         profile_public: true,
       },
       age: age,
-      profile_picture: profilePicture,
       created_at: new Date(),
       modified_at: new Date(),
     };
@@ -99,12 +96,7 @@ const exportedMethods = {
         max: 120,
       });
     }
-    if (updatedUser.profilePicture) {
-      updatedUserData.profilePicture = validation.checkString(
-        updatedUser.profilePicture,
-        "Profile Picture",
-      );
-    }
+    
     updatedUserData.modified_at = new Date();
     const newUser = await userCollection.findOneAndUpdate(
       { _id: id },
@@ -168,10 +160,9 @@ const exportedMethods = {
     username,
     password,
     age,
-    profilePicture,
   ) {
     console.log("singing up user")
-    let newUser = this.createUser(firstName, lastName, email, username, password, age, profilePicture)
+    let newUser = this.createUser(firstName, lastName, email, username, password, age)
     return {registrationCompleted: true}
 
   },
@@ -194,8 +185,7 @@ const exportedMethods = {
             lastName: user.lastName,
             email: user.email,
             username: user.username,
-            age: user.age,
-            profilePicture: user.profilePicture}
+            age: user.age}
   },
   async signInUserByEmail (email, password) {
     email = validation.checkEmail(email)
@@ -210,12 +200,11 @@ const exportedMethods = {
     if(!matched){
       throw new Error("Either the email or password is invalid")
     }
-    return {firstName: user.firstName,
-      lastName: user.lastName,
+    return {firstName: user.first_name,
+      lastName: user.last_name,
       email: user.email,
       username: user.username,
-      age: user.age,
-      profilePicture: user.profilePicture}
+      age: user.age}
   },
 };
 
