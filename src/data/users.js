@@ -175,28 +175,48 @@ const exportedMethods = {
     return {registrationCompleted: true}
 
   },
-  
-  async signInUser (userId, password) {
+
+  async signInUserById (userId, password) {
     userId = validation.checkUserId(userId)
     userId = userId.toLowerCase()
     password = validation.checkPassword(password)
     const userCollection = await users();
     const user = await userCollection.findOne({userId: userId});
     if(user === null){
-      throw "Either the userId or password is invalid"
+        throw new Error("Either the userId or password is invalid")
     }
-    let hash = user.password
+    let hash = user.password_hash
     let matched = await bcrypt.compare(password, hash);
     if(!matched){
-      throw "Either the userId or password is invalid"
+      throw new Error("Either the userId or password is invalid")
     }
-    return {firstName: user.firstName, 
-            lastName: user.lastName, 
-            email: user.email, 
-            username: user.username, 
-            age: user.age, 
+    return {firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            username: user.username,
+            age: user.age,
             profilePicture: user.profilePicture}
-  }
+  },
+  async signInUserByEmail (email, password) {
+    email = validation.checkEmail(email)
+    password = validation.checkPassword(password)
+    const userCollection = await users();
+    const user = await userCollection.findOne({email: email});
+    if(user === null){
+        throw new Error("Either the email or password is invalid")
+    }
+    let hash = user.password_hash
+    let matched = await bcrypt.compare(password, hash);
+    if(!matched){
+      throw new Error("Either the email or password is invalid")
+    }
+    return {firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
+      age: user.age,
+      profilePicture: user.profilePicture}
+  },
 };
 
 export default exportedMethods;

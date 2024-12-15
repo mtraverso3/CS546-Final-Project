@@ -89,18 +89,18 @@ const exportedMethods = {
   },
 
   checkEmail(email) {
-    console.log(email)
     email = this.checkString(email, "email")
+    email = email.toLowerCase();
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if(!regex.test(email)){
-        throw "email must be a valid email of the form: example@domain.com"
+        throw new Error("Invalid email. Please enter an email in the format: john@example.com")
     }
     return email;
 },
   checkUserId (userId) {
     userId = this.checkString(userId)
     if(userId.length > 10 || userId.length < 5){
-        throw "UserID must be between 5 - 10 characters"
+        throw new Error("userId must be between 5 - 10 characters")
     }
     return userId
   },

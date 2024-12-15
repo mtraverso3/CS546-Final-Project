@@ -22,8 +22,35 @@ router.route("/intro").get(async (req, res) => {
   } else {
     return res.render("intro", {
       title: "Sign Up",
-      layout: "sign_up_layout", // added
+      layout: "sign_up_layout",
     });
+  }
+}).post(async (req, res) => {
+  let user = req.body
+  if (!user.email || !user.password) {
+    return res.status(400).render("intro", {
+      title: "Sign Up",
+      layout: "sign_up_layout",
+    });
+  }
+
+  try {
+    user.email = validation.checkEmail(user.email);
+    user.password = validation.checkPassword(user.password);
+  } catch (e) {
+    return res.status(400).render("intro", {
+      title: "Sign Up",
+      layout: "sign_up_layout",
+    });
+  }
+  try {
+    req.session.user = await userData.signInUserByEmail(user.email, user.password);
+    req.session.AuthenticationState = { user: req.session.user };
+
+    res.redirect("/homepage");
+
+  } catch (e) {
+    return res.status(401).redirect("/intro");
   }
 });
 
@@ -51,12 +78,12 @@ router
       user.enterEmail = validation.checkEmail(user.enterEmail)
       user.confirmPassword = validation.checkPassword(user.confirmPassword);
       if (user.password !== user.confirmPassword) throw new Error('Error: Passwords do not match');
-    
+
     } catch (e) {
       console.log(e)
       return res.status(400).render('sign_up', {title: "signupuser"});
     }
-    
+
     try {
       user.age = 18
       user.profilePicture = "N/A"
@@ -69,9 +96,9 @@ router
       console.log(e)
       return res.status(400).render('signupuser', {title: "signupuser"});
     }
-    
+
     return res.status(500).render('signupuser', {title: "signupuser"});
-    
+
   });
 
 
@@ -87,32 +114,11 @@ router
     return res.redirect("/intro");
   });
 
-  
 
-router.route("/auth/login").post(async (req, res) => {
-  let user = req.body
-  if (!user.email || !user.password) {
-    return res.status(400).render('intro', {title: "signinuser"});
-  }
 
-  try {
-    user.email = validation.email(user.email);
-    user.userId = user.userId.toLowerCase();
-    user.password = validation.checkPassword(user.password);
-  } catch (e) {
-    return res.status(400).render('intro', {title: "signinuser"});
-  }
-  try {
-    req.session.user = await userData.signInUser(user.userId, user.password);
-    
-    res.redirect("/homepage");
-    
-  } catch (e) {
-    return res.status(401).redirect("/intro");
-  }
-});
 
 router.route("/homepage").get(async (req, res) => {
+  console.log("homepage")
   if (req.session && req.session.AuthenticationState) {
     const v = {}; //await videos.getVideoByOwner( req.session.AuthenticationState.user._id)
     res.render("homepage", {
