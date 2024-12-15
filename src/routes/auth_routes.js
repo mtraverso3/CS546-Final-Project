@@ -1,9 +1,19 @@
 import e, { Router } from "express";
+
 const router = Router();
 import { users, videos } from "../config/mongoCollections.js";
 import bcrypt from "bcrypt";
 import validation from "../utils/validation.js";
-import userData from "../data/users.js"
+import userData from "../data/users.js";
+import {videoData} from "../data/index.js";
+
+const getAllVideosMatching = async (search) => {
+  const videoCollection = await videos();
+  const videoList = await videoCollection
+    .find({ title: { $regex: search, $options: "i" } })
+    .toArray();
+  return videoList;
+};
 
 const getUserByEmail = async (email) => {
   const userCollection = await users();
@@ -16,43 +26,48 @@ router.route("/").get(async (req, res) => {
   return res.redirect("/intro");
 });
 
-router.route("/intro").get(async (req, res) => {
-  if (req.session && req.session.AuthenticationState) {
-    res.redirect("/homepage");
-  } else {
-    return res.render("intro", {
-      title: "Sign Up",
-      layout: "sign_up_layout",
-    });
-  }
-}).post(async (req, res) => {
-  let user = req.body
-  if (!user.email || !user.password) {
-    return res.status(400).render("intro", {
-      title: "Sign Up",
-      layout: "sign_up_layout",
-    });
-  }
+router
+  .route("/intro")
+  .get(async (req, res) => {
+    if (req.session && req.session.AuthenticationState) {
+      res.redirect("/homepage");
+    } else {
+      return res.render("intro", {
+        title: "Sign Up",
+        layout: "sign_up_layout",
+      });
+    }
+  })
+  .post(async (req, res) => {
+    let user = req.body;
+    if (!user.email || !user.password) {
+      return res.status(400).render("intro", {
+        title: "Sign Up",
+        layout: "sign_up_layout",
+      });
+    }
 
-  try {
-    user.email = validation.checkEmail(user.email);
-    user.password = validation.checkPassword(user.password);
-  } catch (e) {
-    return res.status(400).render("intro", {
-      title: "Sign Up",
-      layout: "sign_up_layout",
-    });
-  }
-  try {
-    req.session.user = await userData.signInUserByEmail(user.email, user.password);
-    req.session.AuthenticationState = { user: req.session.user };
+    try {
+      user.email = validation.checkEmail(user.email);
+      user.password = validation.checkPassword(user.password);
+    } catch (e) {
+      return res.status(400).render("intro", {
+        title: "Sign Up",
+        layout: "sign_up_layout",
+      });
+    }
+    try {
+      req.session.user = await userData.signInUserByEmail(
+        user.email,
+        user.password,
+      );
+      req.session.AuthenticationState = { user: req.session.user };
 
-    res.redirect("/homepage");
-
-  } catch (e) {
-    return res.status(401).redirect("/intro");
-  }
-});
+      res.redirect("/homepage");
+    } catch (e) {
+      return res.status(401).redirect("/intro");
+    }
+  });
 
 router
   .route("/signup")
@@ -66,41 +81,46 @@ router
     }
   })
   .post(async (req, res) => {
-    console.log("here1")
-    let user = req.body
+    let user = req.body;
     try {
       user.firstName = validation.checkName(user.firstName);
       user.lastName = validation.checkName(user.lastName);
       user.userId = validation.checkUserId(user.userId);
-      user.userId = user.userId.toLowerCase()
+      user.userId = user.userId.toLowerCase();
       user.password = validation.checkPassword(user.password);
-      console.log(user.enterEmail)
-      user.enterEmail = validation.checkEmail(user.enterEmail)
+      console.log(user.enterEmail);
+      user.enterEmail = validation.checkEmail(user.enterEmail);
       user.confirmPassword = validation.checkPassword(user.confirmPassword);
-      if (user.password !== user.confirmPassword) throw new Error('Error: Passwords do not match');
-
+      if (user.password !== user.confirmPassword)
+        throw new Error("Error: Passwords do not match");
     } catch (e) {
-      console.log(e)
-      return res.status(400).render('sign_up', {title: "signupuser"});
+      console.log(e);
+      return res.status(400).render("sign_up", { title: "signupuser" });
     }
 
     try {
-      user.age = 18
-      user.profilePicture = "N/A"
-      console.log("creating user...")
-      const {registrationCompleted} = await userData.signUpUser(user.firstName, user.lastName, user.enterEmail, user.userId, user.password, user.age, user.profilePicture);
+      user.age = 18;
+      user.profilePicture = "N/A";
+      console.log("creating user...");
+      const { registrationCompleted } = await userData.signUpUser(
+        user.firstName,
+        user.lastName,
+        user.enterEmail,
+        user.userId,
+        user.password,
+        user.age,
+        user.profilePicture,
+      );
       if (registrationCompleted) {
-        return res.redirect('/intro');
+        return res.redirect("/intro");
       }
     } catch (e) {
-      console.log(e)
-      return res.status(400).render('signupuser', {title: "signupuser"});
+      console.log(e);
+      return res.status(400).render("signupuser", { title: "signupuser" });
     }
 
-    return res.status(500).render('signupuser', {title: "signupuser"});
-
+    return res.status(500).render("signupuser", { title: "signupuser" });
   });
-
 
 router
   .route("/auth/logout")
@@ -114,17 +134,44 @@ router
     return res.redirect("/intro");
   });
 
+router
+  .route("/search")
+  .post(async (req, res) => {
+    if (req.session && req.session.AuthenticationState) {
+      const v = await getAllVideosMatching(req.body.search);
 
-
+      res.render("homepage", {
+        user: req.session.AuthenticationState.user,
+        videos: v,
+      });
+    } else {
+      return res.status(401).redirect("/intro");
+    }
+  })
+  .get(async (req, res) => {
+    if (req.session && req.session.AuthenticationState) {
+      res.render("homepage", { user: req.session.AuthenticationState.user });
+    } else {
+      return res.status(401).redirect("/intro");
+    }
+  });
 
 router.route("/homepage").get(async (req, res) => {
-  console.log("homepage")
   if (req.session && req.session.AuthenticationState) {
-    const v = {}; //await videos.getVideoByOwner( req.session.AuthenticationState.user._id)
-    res.render("homepage", {
-      layout: "main", // added
-      user: req.session.AuthenticationState.user,
-    });
+
+    try {
+        const v = await videoData.getAllVideos();
+
+      res.render("homepage", {
+        user: req.session.AuthenticationState.user,
+        videos: v,
+      });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).redirect("/intro");
+    }
+
+
   } else {
     return res.status(401).redirect("/intro");
   }
@@ -132,10 +179,7 @@ router.route("/homepage").get(async (req, res) => {
 
 router.route("/profile").get(async (req, res) => {
   if (req.session && req.session.AuthenticationState) {
-    res.render("profile", {
-      layout: "main", // added
-      user: req.session.AuthenticationState.user,
-    });
+    res.render("profile", { user: req.session.AuthenticationState.user });
   } else {
     return res.status(401).redirect("/intro");
   }
@@ -146,7 +190,6 @@ router
   .get(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
       return res.render("settings", {
-        layout: "main", // added
         user: req.session.AuthenticationState.user,
       });
     } else {
@@ -156,10 +199,7 @@ router
   .post(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
       users.updateUserPatch(req.session.AuthenticationState.user._id, req.body);
-      res.render("settings", {
-        layout: "main", // added
-        user: req.session.AuthenticationState.user,
-      });
+      res.render("settings", { user: req.session.AuthenticationState.user });
     } else {
       return res.status(401).redirect("/intro");
     }
