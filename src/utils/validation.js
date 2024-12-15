@@ -17,6 +17,7 @@ const exportedMethods = {
   },
 
   checkString(strVal, varName) {
+    console.log(strVal)
     if (!strVal) throw new Error(`Error: You must supply a ${varName}!`);
     if (typeof strVal !== "string")
       throw new Error(`Error: ${varName} must be a string!`);
@@ -88,24 +89,24 @@ const exportedMethods = {
     return arr;
   },
 
-  checkEmail(email, varName) {
-    this.checkString(email, varName);
-
-    if (!EmailValidator.validate(email)) {
-      throw new Error(`Error: ${varName} is not a valid email address`);
+  checkEmail(email) {
+    console.log(email)
+    email = this.checkString(email, "email")
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if(!regex.test(email)){
+        throw "email must be a valid email of the form: example@domain.com"
     }
-
     return email;
-  },
+},
   checkUserId (userId) {
-    userId = validateString(userId)
+    userId = this.checkString(userId)
     if(userId.length > 10 || userId.length < 5){
         throw "UserID must be between 5 - 10 characters"
     }
     return userId
   },
   checkPassword(password) {
-    password = validateString(password)
+    password = this.checkString(password)
     if(password.length < 8){
         throw "Password must be at least 8 characters long"
     }
@@ -123,7 +124,18 @@ const exportedMethods = {
     }
     return password
     
-  }
+  },
+  checkName(name){
+    name = this.checkString(name)
+    if(name.length > 25 || name.length < 2){
+        throw "name must be between 2 - 25 characters"
+    }
+    const regex = /\d/;
+    if(regex.test(name)){
+        throw "name cannot contain numbers"
+    }
+    return name
+}
 };
 
 

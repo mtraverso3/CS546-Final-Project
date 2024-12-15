@@ -276,7 +276,6 @@
       // We can take advantage of functional scoping; our event listener has access to its outer functional scope
       // This means that these variables are accessible in our callback
       loginForm.addEventListener('submit', (event) => {
-        event.preventDefault();
   
         try {
           // hide containers by default
@@ -291,6 +290,8 @@
   
         } catch (e) {
           //const message = typeof e === 'string' ? e : e.message;
+          event.preventDefault();
+
           errorTextElement.textContent = e;
           errorDiv.classList.remove('hidden');
         }
@@ -315,7 +316,6 @@
         // We can take advantage of functional scoping; our event listener has access to its outer functional scope
         // This means that these variables are accessible in our callback
         signUpForm.addEventListener('submit', (event) => {
-          event.preventDefault();
     
           try {
             // hide containers by default
@@ -341,6 +341,8 @@
             id = checkUserId(id)
           } catch (e) {
             //const message = typeof e === 'string' ? e : e.message;
+            event.preventDefault();
+
             errorTextElement.textContent = e;
             errorDiv.classList.remove('hidden');
           }

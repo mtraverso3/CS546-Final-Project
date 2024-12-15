@@ -170,6 +170,7 @@ const exportedMethods = {
     age,
     profilePicture,
   ) {
+    console.log("singing up user")
     let newUser = this.createUser(firstName, lastName, email, username, password, age, profilePicture)
     return {registrationCompleted: true}
 
