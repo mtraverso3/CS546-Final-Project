@@ -1,4 +1,4 @@
-import { videos, comments } from "../config/mongoCollections.js";
+import { comments, videos } from "../config/mongoCollections.js";
 import validation from "../utils/validation.js";
 
 const exportedMethods = {
@@ -172,6 +172,12 @@ const exportedMethods = {
 
     const videoCollection = await videos();
     return await videoCollection.find({ owner_id: ownerId }).toArray();
+  },
+  async getAllVideosMatching(search) {
+    const videoCollection = await videos();
+    return await videoCollection
+      .find({ title: { $regex: search, $options: "i" } })
+      .toArray();
   },
 };
 
