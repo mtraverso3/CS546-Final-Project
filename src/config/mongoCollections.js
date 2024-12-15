@@ -19,4 +19,5 @@ const getCollectionFn = (collection) => {
 export const videos = getCollectionFn("videos");
 export const users = getCollectionFn("users");
 export const comments = getCollectionFn("comments");
+export const likes = getCollectionFn("likes");
 export const videoRatings = getCollectionFn("videoRatings");
