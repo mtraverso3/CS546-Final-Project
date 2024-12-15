@@ -37,6 +37,12 @@ const exportedMethods = {
     password = await bcrypt.hash(password, bcryptConfig.saltRounds);
 
     const userCollection = await users();
+
+    // Check if the email is already in use
+    const emailCheck = await userCollection.findOne({ email: email });
+    if (emailCheck) throw new Error("Email already in use");
+
+
     const newUser = {
       first_name: firstName,
       last_name: lastName,
