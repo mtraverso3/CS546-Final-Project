@@ -1,0 +1,58 @@
+{{!-- views/sign_up.handlebars --}}
+<div class="background-grid"></div>
+<div class="login-container">
+    <h1 class="welcome-text" data-text="Join YourTube">Join YourTube</h1>
+    <div class="login-box">
+        <div class="logo-section">
+            <div class="circle-avatar">YT</div>
+            <h1>Create Account</h1>
+            <p>begin your journey</p>
+        </div>
+
+        {{#if error}}
+            <div class="error-message">{{error}}</div>
+        {{/if}}
+
+        <form id="signup-form" method="POST" action="/signupuser">
+            <div class="form-group">
+                <input type="text" id="firstName" name="firstName" required>
+                <label for="firstName">First Name</label>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="lastName" name="lastName" required>
+                <label for="lastName">Last Name</label>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="userId" name="userId" required>
+                <label for="userId">User ID</label>
+            </div>
+
+            <div class="form-group">
+                <input type="email" id="enterEmail" name="enterEmail" required>
+                <label for="enterEmail">Email</label>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="password" name="password" required>
+                <label for="password">Password</label>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <label for="confirmPassword">Confirm Password</label>
+            </div>
+
+            <div class="form-footer">
+                <a href="/intro" class="create-account">Already have an account?</a>
+                <button type="submit" class="login-button">Create Account</button>
+            </div>
+            <div class="hidden" id="error-div">
+                <div class="alert alert-danger text-goes-here">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
