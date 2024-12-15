@@ -1,140 +1,82 @@
 {{!-- settings.handlebars --}}
 <div class="app-container">
     {{> nav}}
-    
-    <main class="main-content settings-container">
-        <h1 class="settings-title">Settings</h1>
+    {{> sidebar}}
 
-        <div class="settings-grid">
-            <div class="settings-sidebar">
-                <button class="settings-nav-item active" data-section="account">
-                    Account
-                </button>
-                <button class="settings-nav-item" data-section="profile">
-                    Profile
-                </button>
-                <button class="settings-nav-item" data-section="privacy">
-                    Privacy
-                </button>
-                <button class="settings-nav-item" data-section="notifications">
-                    Notifications
-                </button>
-            </div>
+    <main class="main-content">
+        <div class="content-container">
+            <h1 class="settings-title">Settings</h1>
 
-            <div class="settings-content">
-                <form
-                    id="account-settings"
-                    class="settings-form"
-                    method="POST"
-                    action="/settings/account"
-                >
-                    <div class="settings-section" id="account">
+            <div class="settings-wrapper">
+                <form id="settings-form" method="POST" action="/settings">
+                    <!-- Account Settings -->
+                    <div class="settings-section">
                         <h2>Account Settings</h2>
-
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                value="{{user.email}}"
-                                required
-                            />
+                            <input type="email" id="email" name="email" value="{{user.email}}" class="settings-input"
+                                   placeholder="Email" required/>
                         </div>
-
                         <div class="form-group">
-                            <label for="current-password">Current Password</label>
-                            <input
-                                type="password"
-                                id="current-password"
-                                name="currentPassword"
-                            />
+                            <input type="password" id="current-password" name="currentPassword" class="settings-input"
+                                   placeholder="Current Password"/>
                         </div>
-
                         <div class="form-group">
-                            <label for="new-password">New Password</label>
-                            <input 
-                                type="password" 
-                                id="new-password" 
-                                name="newPassword"
-                            />
+                            <input type="password" id="new-password" name="newPassword" class="settings-input"
+                                   placeholder="New Password"/>
                         </div>
-
                         <div class="form-group">
-                            <label for="confirm-password">Confirm New Password</label>
-                            <input
-                                type="password"
-                                id="confirm-password"
-                                name="confirmPassword"
-                            />
+                            <input type="password" id="confirm-password" name="confirmPassword" class="settings-input"
+                                   placeholder="Confirm New Password"/>
                         </div>
                     </div>
 
-                    <div class="settings-section" id="profile">
+                    <!-- Profile Settings -->
+                    <div class="settings-section">
                         <h2>Profile Settings</h2>
-
                         <div class="form-group">
-                            <label for="display-name">Display Name</label>
-                            <input
-                                type="text"
-                                id="display-name"
-                                name="displayName"
-                                value="{{user.displayName}}"
-                                required
-                            />
+                            <input type="text" id="display-name" name="displayName" value="{{user.displayName}}"
+                                   class="settings-input" placeholder="Display Name" required/>
                         </div>
-
                         <div class="form-group">
-                            <label for="bio">Bio</label>
-                            <textarea 
-                                id="bio" 
-                                name="bio" 
-                                rows="4"
-                            >{{user.bio}}</textarea>
+                            <textarea id="bio" name="bio" class="settings-input" placeholder="Bio"
+                                      rows="4">{{user.bio}}</textarea>
                         </div>
                     </div>
 
-                    <div class="settings-section" id="privacy">
+                    <!-- Privacy Settings -->
+                    <div class="settings-section">
                         <h2>Privacy Settings</h2>
-
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input 
-                                    type="checkbox" 
-                                    name="profilePublic"
-                                    {{#if user.visibility.profile_public}}checked{{/if}}
-                                />
-                                <span>Show my profile other users</span>
+                        <div class="form-group">
+                            <label class="settings-checkbox">
+                                <input type="checkbox" name="showSubscriptions"
+                                       {{#if user.showSubscriptions}}checked{{/if}} />
+                                <span>Show my subscriptions to other users</span>
                             </label>
                         </div>
-
-
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input 
-                                    type="checkbox" 
-                                    name="emailPublic"
-                                    {{#if user.visibility.email_public}}checked{{/if}}
-                                />
-                                <span>Show my email other users</span>
+                        <div class="form-group">
+                            <label class="settings-checkbox">
+                                <input type="checkbox" name="showLikedVideos"
+                                       {{#if user.showLikedVideos}}checked{{/if}} />
+                                <span>Show my liked videos to other users</span>
                             </label>
                         </div>
+                    </div>
 
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input 
-                                    type="checkbox" 
-                                    name="namePublic"
-                                    {{#if user.visibility.name_public}}checked{{/if}}
-                                />
-                                <span>Show my name videos to other users</span>
+                    <!-- Notifications -->
+                    <div class="settings-section">
+                        <h2>Notification Settings</h2>
+                        <div class="form-group">
+                            <label class="settings-checkbox">
+                                <input type="checkbox" name="emailNotifications"
+                                       {{#if user.emailNotifications}}checked{{/if}} />
+                                <span>Email notifications</span>
                             </label>
                         </div>
+                    </div>
 
-                        <div class="settings-actions">
-                            <button type="submit" class="save-button">Save Changes</button>
-                            <button type="reset" class="cancel-button">Cancel</button>
-                        </div>
+                    <div class="settings-actions">
+                        <button type="submit" class="save-button">Save Changes</button>
+                        <button type="reset" class="cancel-button">Cancel</button>
                     </div>
                 </form>
             </div>

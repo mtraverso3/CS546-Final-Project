@@ -1,51 +1,57 @@
 {{!-- profile.handlebars --}}
 <div class="app-container">
     {{> nav}}
-    
-    <main class="main-content profile-container">
-        <div class="profile-header">
-            <div class="profile-banner">
-                <div class="profile-avatar-large"><img src="{{user.profile_picture}}"></div>
-                <div class="profile-info">
-                    <h1>{{user.first_name}} {{user.last_name}}</h1>
-                    <div class="profile-stats">
-                        <span>125 Videos</span>
-                        <span>1.2K Subscribers</span>
-                        <span>Joined Jan 2024</span>
+    {{> sidebar}}
+
+    <main class="main-content">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-banner">
+                    <div class="profile-avatar-large"><img src="{{user.profile_picture}}"></div>
+                    <div class="profile-info">
+                        <h1>{{user.first_name}} {{user.last_name}}</h1>
+                        <div class="profile-stats">
+                            <span>125 Videos</span>
+                            <span>1.2K Subscribers</span>
+                            <span>Joined Jan 2024</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="profile-actions">
-                <a href="/settings" class="settings-button">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="2"/>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    Settings
-                </a>
-                <form action="/auth/logout" method="POST" class="logout-form">
-                    <button type="submit" class="logout-button">
+
+                <div class="profile-actions">
+                    <a href="/settings" class="settings-button">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                                  stroke="currentColor" stroke-width="2"/>
                         </svg>
-                        Sign Out
-                    </button>
-                </form>
+                        Settings
+                    </a>
+                    <form action="/auth/logout" method="POST" class="logout-form">
+                        <button type="submit" class="logout-button">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"
+                                      stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                      stroke-linejoin="round"/>
+                            </svg>
+                            Sign Out
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
 
-        <div class="profile-tabs">
-            <button class="tab-button active" data-tab="videos">Videos</button>
-            <button class="tab-button" data-tab="playlists">Playlists</button>
-            <button class="tab-button" data-tab="about">About</button>
-        </div>
+            <div class="profile-tabs">
+                <button class="tab-button active" data-tab="videos">Videos</button>
+                <button class="tab-button" data-tab="playlists">Playlists</button>
+                <button class="tab-button" data-tab="about">About</button>
+            </div>
 
-        <div class="tab-content" id="videos">
-            <div class="video-grid">
-                {{#each videos}}
-                    {{> video-card}}
-                {{/each}}
+            <div class="tab-content" id="videos">
+                <div class="video-grid">
+                    {{#each videos}}
+                        {{> video-card}}
+                    {{/each}}
+                </div>
             </div>
         </div>
     </main>
