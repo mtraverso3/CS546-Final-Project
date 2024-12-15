@@ -17,7 +17,6 @@ const exportedMethods = {
   },
 
   checkString(strVal, varName) {
-    console.log(strVal)
     if (!strVal) throw new Error(`Error: You must supply a ${varName}!`);
     if (typeof strVal !== "string")
       throw new Error(`Error: ${varName} must be a string!`);

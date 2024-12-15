@@ -138,7 +138,6 @@
     box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
     outline: none;
 }
-
 .form-group label {
     position: absolute;
     left: 16px;
@@ -1184,3 +1183,11 @@
     border: 1px solid #1df2f0;
     color: #fff;
 }
+
+
+img{
+    max-height:100px;
+    max-width:100px;
+}
+
+
