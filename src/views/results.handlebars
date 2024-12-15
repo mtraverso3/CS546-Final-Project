@@ -1,0 +1,51 @@
+<div class="app-container">
+    {{> nav}}
+    {{> sidebar}}
+    
+    <main class="main-content">
+        <div class="results-header">
+            <h1 class="results-title">Search Results: "{{searchQuery}}"</h1>
+            <div class="results-info">{{totalResults}} results</div>
+        </div>
+
+        <div class="results-filters">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Videos</button>
+            <button class="filter-btn">Channels</button>
+            <button class="filter-btn">Playlists</button>
+        </div>
+
+        <div class="video-grid">
+            {{#each videos}}
+            <article class="video-card">
+                <div class="thumbnail-container">
+                    <img src="{{thumbnailUrl}}" alt="{{title}}" class="video-thumbnail">
+                    <span class="video-duration">{{duration}}</span>
+                </div>
+                <div class="video-info">
+                    <div class="channel-avatar">{{channelInitial}}</div>
+                    <div class="video-details">
+                        <h3 class="video-title">{{title}}</h3>
+                        <a href="/channel/{{channelId}}" class="channel-name">{{channelName}}</a>
+                        <div class="video-meta">
+                            <span>{{views}} views</span>
+                            <span>{{likes}} likes</span>
+                            <span>{{publishedAt}}</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {{/each}}
+        </div>
+
+        <div class="pagination">
+            <button class="page-btn" {{#unless hasPrevPage}}disabled{{/unless}}>Previous</button>
+            <div class="page-numbers">
+                {{#each pages}}
+                    <button class="page-btn {{#if isCurrentPage}}active{{/if}}">{{number}}</button>
+                {{/each}}
+            </div>
+            <button class="page-btn" {{#unless hasNextPage}}disabled{{/unless}}>Next</button>
+        </div>
+    </main>
+</div>

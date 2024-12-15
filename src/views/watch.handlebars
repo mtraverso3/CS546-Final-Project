@@ -1,0 +1,121 @@
+<div class="app-container">
+    {{> nav}}
+    {{> sidebar}}
+    
+    <main class="main-content watch-content">
+        <div class="watch-grid">
+            <div class="primary-column">
+                <!-- plays video -->
+                <div class="video-player-container">
+                    <video controls class="video-player">
+                        <source src="{{video.videoUrl}}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <!-- video information -->
+                <div class="video-details-container">
+                    <h1 class="video-title">{{video.title}}</h1>
+                    
+                    <div class="video-stats">
+                        <div class="stats-left">
+                            <span>{{video.views}} views</span>
+                            <span>{{video.publishedAt}}</span>
+                        </div>
+                        
+                        <div class="video-actions">
+                            <button class="action-btn">
+                                <span class="likes-count">{{video.likes}}</span>
+                                Like
+                            </button>
+                            <button class="action-btn">
+                                <span class="dislikes-count">{{video.dislikes}}</span>
+                                Dislike
+                            </button>
+                            <button class="action-btn">Share</button>
+                        </div>
+                    </div>
+
+                    <!-- channel info -->
+                    <div class="channel-info">
+                        <div class="channel-header">
+                            <div class="channel-avatar">{{video.channelInitial}}</div>
+                            <div class="channel-details">
+                                <a href="/channel/{{video.channelId}}" class="channel-name">{{video.channelName}}</a>
+                                <span class="subscriber-count">{{video.subscriberCount}} subscribers</span>
+                            </div>
+                            <button class="subscribe-btn">Subscribe</button>
+                        </div>
+                        
+                        <div class="video-description">
+                            {{video.description}}
+                        </div>
+                    </div>
+
+                    <!-- comment section -->
+                    <div class="comments-section">
+                        <h3 class="comments-header">{{video.commentCount}} Comments</h3>
+                        
+                        <!-- comment form -->
+                        <div class="comment-form-container">
+                            <div class="user-avatar">{{userInitial}}</div>
+                            <form class="comment-form">
+                                <input type="text" placeholder="Add a comment..." class="comment-input">
+                                <div class="comment-actions">
+                                    <button type="button" class="cancel-btn">Cancel</button>
+                                    <button type="submit" class="comment-btn">Comment</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- commenting list -->
+                        <div class="comments-list">
+                            {{#each comments}}
+                            <div class="comment">
+                                <div class="comment-avatar">{{this.userInitial}}</div>
+                                <div class="comment-content">
+                                    <div class="comment-header">
+                                        <a href="/profile/{{this.userId}}" class="comment-username">{{this.username}}</a>
+                                        <span class="comment-date">{{this.publishedAt}}</span>
+                                    </div>
+                                    <p class="comment-text">{{this.text}}</p>
+                                    <div class="comment-actions">
+                                        <button class="comment-action-btn">
+                                            <span class="likes-count">{{this.likes}}</span>
+                                            Like
+                                        </button>
+                                        <button class="comment-action-btn">Reply</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- related videos section -->
+            <div class="secondary-column">
+                <h3 class="related-header">Related Videos</h3>
+                <div class="related-videos">
+                    {{#each relatedVideos}}
+                    <a href="/watch/{{this.id}}" class="related-video">
+                        <div class="related-thumbnail">
+                            <img src="{{this.thumbnailUrl}}" alt="{{this.title}}">
+                            <span class="video-duration">{{this.duration}}</span>
+                        </div>
+                        <div class="related-info">
+                            <h4 class="related-title">{{this.title}}</h4>
+                            <p class="related-channel">{{this.channelName}}</p>
+                            <div class="related-meta">
+                                <span>{{this.views}} views</span>
+                                <span>{{this.publishedAt}}</span>
+                            </div>
+                        </div>
+                    </a>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
