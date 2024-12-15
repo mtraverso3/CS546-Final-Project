@@ -31,8 +31,6 @@ const exportedMethods = {
       whitelisted_users: [],
       file_path: file_path,
       created_at: new Date(),
-      like_count: 0,
-      dislike_count: 0,
     };
 
     const videoCollection = await videos();

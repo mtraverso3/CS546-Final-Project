@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import EmailValidator from "email-validator";
+import {validateDate} from "./validate-date.js"
 
 const exportedMethods = {
   checkId(id, varName) {
@@ -134,8 +135,35 @@ const exportedMethods = {
         throw "name cannot contain numbers"
     }
     return name
-}
+  },
+  checkDOB(dob){
+    let validDate = validateDate(dob);
+    let currentDate = new Date()
+    let dobDate = new Date(dob)
+    let currentYear = currentDate.getFullYear()
+    let currentMonth = currentDate.getMonth() + 1
+    let currentDay = currentDate.getDate()
+    let dobSplit = dob.split("-")
+    let dobYear = Number(dobSplit[2])
+    let dobMonth = Number(dobSplit[0])
+    let dobDay = Number(dobSplit[1])
+    
+    const diffInMilliseconds = currentDate.getTime() - dobDate.getTime();
+    const ageInYears = diffInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+
+    const age = Math.floor(ageInYears);
+    console.log(age)
+
+    if(age < 13){
+      throw "User must be at least 13 years in age"
+    }
+    else if(age > 120){
+      throw "Woah there! Age must be within livible range and therefore less than 120 years old"
+    }
+    return dob
+  }
 };
+
 
 
 

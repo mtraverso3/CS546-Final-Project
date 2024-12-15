@@ -91,15 +91,19 @@ router
       console.log(user.enterEmail);
       user.enterEmail = validation.checkEmail(user.enterEmail);
       user.confirmPassword = validation.checkPassword(user.confirmPassword);
+      console.log(user.dob)
+      user.dob = validation.checkDOB(user.dob)
+      console.log(user.dob)
       if (user.password !== user.confirmPassword)
         throw new Error("Error: Passwords do not match");
     } catch (e) {
       console.log(e);
-      return res.status(400).render("sign_up", { title: "signupuser" });
+      return res.status(400).render("sign_up", {
+        layout: "sign_up_layout", // added
+      });
     }
 
     try {
-      user.age = 18;
       console.log("creating user...");
       const { registrationCompleted } = await userData.signUpUser(
         user.firstName,
@@ -107,7 +111,7 @@ router
         user.enterEmail,
         user.userId,
         user.password,
-        user.age,
+        user.dob,
       );
       if (registrationCompleted) {
         return res.redirect("/intro");

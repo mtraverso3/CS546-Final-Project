@@ -3,6 +3,7 @@ import validation from "../utils/validation.js";
 import { bcryptConfig } from "../config/settings.js";
 import bcrypt from "bcrypt";
 
+
 const exportedMethods = {
   async getAllUsers() {
     const userCollection = await users();
@@ -21,18 +22,14 @@ const exportedMethods = {
     email,
     username,
     password,
-    age,
+    dob,
   ) {
     firstName = validation.checkString(firstName, "First Name");
     lastName = validation.checkString(lastName, "Last Name");
     email = validation.checkEmail(email, "Email");
     username = validation.checkString(username, "Username");
     password = validation.checkString(password, "Password");
-    age = validation.checkNumber(age, "Age", {
-      onlyInt: true,
-      min: 0,
-      max: 120,
-    });
+    dob = validation.checkDOB(dob);
 
     password = await bcrypt.hash(password, bcryptConfig.saltRounds);
 
@@ -48,7 +45,7 @@ const exportedMethods = {
         name_public: true,
         profile_public: true,
       },
-      age: age,
+      dob: dob,
       created_at: new Date(),
       modified_at: new Date(),
     };
@@ -89,12 +86,8 @@ const exportedMethods = {
         "Password",
       );
     }
-    if (updatedUser.age) {
-      updatedUserData.age = validation.checkNumber(updatedUser.age, "Age", {
-        onlyInt: true,
-        min: 0,
-        max: 120,
-      });
+    if (updatedUser.dob) {
+      updatedUserData.dob = validation.checkDOB(updatedUser.dob);
     }
     
     updatedUserData.modified_at = new Date();
@@ -159,10 +152,10 @@ const exportedMethods = {
     email,
     username,
     password,
-    age,
+    dob,
   ) {
     console.log("singing up user")
-    let newUser = this.createUser(firstName, lastName, email, username, password, age)
+    let newUser = this.createUser(firstName, lastName, email, username, password, dob)
     return {registrationCompleted: true}
 
   },
@@ -185,7 +178,7 @@ const exportedMethods = {
             lastName: user.lastName,
             email: user.email,
             username: user.username,
-            age: user.age}
+            dob: user.dob}
   },
   async signInUserByEmail (email, password) {
     email = validation.checkEmail(email)
@@ -204,8 +197,8 @@ const exportedMethods = {
       lastName: user.last_name,
       email: user.email,
       username: user.username,
-      age: user.age}
-  },
+      dob: user.dob}
+  }
 };
 
 export default exportedMethods;
