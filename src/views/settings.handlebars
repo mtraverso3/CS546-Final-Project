@@ -31,7 +31,7 @@
                     </div>
 
                     <!-- Profile Settings -->
-                    <div class="settings-section">
+                    {{!-- <div class="settings-section">
                         <h2>Profile Settings</h2>
                         <div class="form-group">
                             <input type="text" id="display-name" name="displayName" value="{{user.displayName}}"
@@ -41,29 +41,35 @@
                             <textarea id="bio" name="bio" class="settings-input" placeholder="Bio"
                                       rows="4">{{user.bio}}</textarea>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- Privacy Settings -->
                     <div class="settings-section">
                         <h2>Privacy Settings</h2>
                         <div class="form-group">
-                            <label class="settings-checkbox">
-                                <input type="checkbox" name="showSubscriptions"
-                                       {{#if user.showSubscriptions}}checked{{/if}} />
+                            <div class="settings-option">
                                 <span>Show my subscriptions to other users</span>
-                            </label>
+                                <button type="button" class="toggle-button {{#if user.showSubscriptions}}active{{/if}}" 
+                                        data-name="showSubscriptions" 
+                                        onclick="toggleSetting(this)">
+                                    {{#if user.showSubscriptions}}ON{{else}}OFF{{/if}}
+                                </button>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label class="settings-checkbox">
-                                <input type="checkbox" name="showLikedVideos"
-                                       {{#if user.showLikedVideos}}checked{{/if}} />
+                            <div class="settings-option">
                                 <span>Show my liked videos to other users</span>
-                            </label>
+                                <button type="button" class="toggle-button {{#if user.showLikedVideos}}active{{/if}}" 
+                                        data-name="showLikedVideos"
+                                        onclick="toggleSetting(this)">
+                                    {{#if user.showLikedVideos}}ON{{else}}OFF{{/if}}
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Notifications -->
-                    <div class="settings-section">
+                    {{!-- <div class="settings-section">
                         <h2>Notification Settings</h2>
                         <div class="form-group">
                             <label class="settings-checkbox">
@@ -71,6 +77,30 @@
                                        {{#if user.emailNotifications}}checked{{/if}} />
                                 <span>Email notifications</span>
                             </label>
+                        </div>
+                    </div> --}}
+
+                    <div class="settings-section account-management">
+                        <h2>Account Management</h2>
+                        
+                        <div class="account-actions">
+                            <!-- Sign Out Button -->
+                            <div class="action-group">
+                                <h3>Sign Out</h3>
+                                <p>Sign out of your account on this device</p>
+                                <button type="button" class="signout-button" onclick="window.location.href='/logout'">
+                                    Sign Out
+                                </button>
+                            </div>
+                            
+                            <!-- Delete Account Section -->
+                            <div class="action-group danger-zone">
+                                <h3>Delete Account</h3>
+                                <p>Permanently delete your account and all associated data</p>
+                                <button type="button" class="delete-account-button">
+                                    Delete Account
+                                </button>
+                            </div>
                         </div>
                     </div>
 
