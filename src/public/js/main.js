@@ -413,7 +413,89 @@
     let signUpForm = document.getElementById('signup-form');
     let loginForm = document.getElementById('login-form');
     let settingsForm = document.getElementById('settings-form');
+    let uploadForm = document.getElementById('upload-form')
+    let commentForm = document.getElementById('comment-form')
+    let searchForm = document.getElementById('search-form')
+    if(searchForm){
+        let search = document.getElementById('search')
+        searchForm.addEventListener('submit', (event) => {
+  
+            try {
+              // hide containers by default
+              errorDiv.classList.add('hidden');
+      
+              // Values come from inputs as strings, no matter what :(
+              search = search.value;
+              console.log("I am validating your search")
+              
+              search = validateString(search)
 
+      
+            } catch (e) {
+              const message = typeof e === 'string' ? e : e.message;
+              event.preventDefault();
+    
+              errorTextElement.textContent = message;
+              errorDiv.classList.remove('hidden');
+            }
+          });
+    }
+    if(commentForm){
+        let comment = document.getElementById('comment')
+        commentForm.addEventListener('submit', (event) => {
+  
+            try {
+              // hide containers by default
+              errorDiv.classList.add('hidden');
+      
+              // Values come from inputs as strings, no matter what :(
+              comment = comment.value;
+              
+              comment = validateString(comment)
+
+      
+            } catch (e) {
+              const message = typeof e === 'string' ? e : e.message;
+              event.preventDefault();
+    
+              errorTextElement.textContent = message;
+              errorDiv.classList.remove('hidden');
+            }
+          });
+    }
+    if(uploadForm){
+        let videoTitle = document.getElementById('title')
+        let description = document.getElementById('description')
+        let visibility = document.getElementById('visibility')
+        let errorDiv = document.getElementById('error-div');
+        let errorTextElement = errorDiv.getElementsByClassName('text-goes-here')[0];
+        uploadForm.addEventListener('submit', (event) => {
+  
+            try {
+              // hide containers by default
+              errorDiv.classList.add('hidden');
+      
+              // Values come from inputs as strings, no matter what :(
+              videoTitle = videoTitle.value;
+              description = description.value;
+              visibility = visibility.value
+              
+              videoTitle = validateString(videoTitle, "videoTitle")
+              description = validateString(description, "videoDescription")
+              if(visibility !== "public" && visibility !== "private"){
+                throw "visibility needs to be either Public or Private"
+              }
+
+      
+            } catch (e) {
+              const message = typeof e === 'string' ? e : e.message;
+              event.preventDefault();
+    
+              errorTextElement.textContent = message;
+              errorDiv.classList.remove('hidden');
+            }
+          });
+    }
     if(settingsForm){
         let email = document.getElementById('email');
         let password = document.getElementById('current-password');
