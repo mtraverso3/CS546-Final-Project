@@ -99,6 +99,7 @@ router
         // todo: add validation new_password vs confirm_password
         // todo: add validation password
         req.session.user = await userData.updateUserPatch(
+
           req.session.AuthenticationState.user._id,
           {
             firstName: req.body.firstName,
@@ -107,7 +108,7 @@ router
             username: req.body.username,
             dob: req.body.dob,
             password: req.body.newPassword,
-          }
+          },
         );
 
         const visibility = await userData.updateUserVisibilityPatch(
@@ -118,6 +119,7 @@ router
             profilePublic: req.body.profilePublic,
           }
         );
+
       } catch (e) {
         return res.status(400).render("settings", {
           user: req.session.AuthenticationState.user,
