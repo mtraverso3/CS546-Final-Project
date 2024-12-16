@@ -101,8 +101,22 @@ router
         req.session.user = await userData.updateUserPatch(
           req.session.AuthenticationState.user._id,
           {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            username: req.body.username,
+            dob: req.body.dob,
             password: req.body.newPassword,
           },
+        );
+
+        const visibility = await userData.updateUserVisibilityPatch(
+          req.session.AuthenticationState.user._id,
+          {
+            emailPublic: req.body.emailPublic,
+            namePublic: req.body.namePublic,
+            profilePublic: req.body.profilePublic,
+          }
         );
 
       } catch (e) {
