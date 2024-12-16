@@ -3,10 +3,12 @@ import authRoutes from "./auth_routes.js";
 import internalRoutes from "./internal_routes.js";
 import watchRoutes from "./watch_routes.js";
 import uploadRoutes from "./upload_routes.js";
+import comments_routes from "./comments_routes.js";
 
 const constructorMethod = (app) => {
   app.use("/watch", watchRoutes);
   app.use("/upload", uploadRoutes);
+  app.use("/comments", comments_routes);
   app.use("/", authRoutes);
   app.use("/", internalRoutes);
 

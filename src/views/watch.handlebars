@@ -59,8 +59,8 @@
                         <!-- comment form -->
                         <div class="comment-form-container">
                             <div class="user-avatar">{{userInitial}}</div>
-                            <form id="comment-form" class="comment-form">
-                                <input id="comment" type="text" placeholder="Add a comment..." class="comment-input">
+                            <form id="comment-form" class="comment-form" method="POST" action="/comments/upload/{{video._id}}">
+                                <input id="comment" type="text" placeholder="Add a comment..." class="comment-input" name="comment">
                                 <div class="comment-actions">
                                     <button type="button" class="cancel-btn">Cancel</button>
                                     <button type="submit" class="comment-btn">Comment</button>
@@ -72,13 +72,13 @@
                         <div class="comments-list">
                             {{#each comments}}
                             <div class="comment">
-                                <div class="comment-avatar">{{this.userInitial}}</div>
+                                <div class="comment-avatar">{{userInitial}}</div>
                                 <div class="comment-content">
                                     <div class="comment-header">
-                                        <a href="/profile/{{this.userId}}" class="comment-username">{{this.username}}</a>
-                                        <span class="comment-date">{{this.publishedAt}}</span>
+                                        <a href="/profile/{{userId}}" class="comment-username">{{username}}</a>
+                                        <span class="comment-date">{{publishedAt}}</span>
                                     </div>
-                                    <p class="comment-text">{{this.text}}</p>
+                                    <p class="comment-text">{{text}}</p>
                                     <div class="comment-actions">
                                         <button class="comment-action-btn">
                                             <span class="likes-count">{{this.likes}}</span>
