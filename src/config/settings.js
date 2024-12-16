@@ -6,3 +6,7 @@ export const mongoConfig = {
 export const bcryptConfig = {
   saltRounds: 13,
 };
+
+export const mediaConfig = {
+    uploadDir: "./data/media",
+}

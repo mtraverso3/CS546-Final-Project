@@ -1,5 +1,7 @@
 import { comments, videos } from "../config/mongoCollections.js";
 import validation from "../utils/validation.js";
+import multer from "multer";
+
 
 const exportedMethods = {
   async getVideoById(id) {
@@ -15,13 +17,13 @@ const exportedMethods = {
     const videoCollection = await videos();
     return await videoCollection.find({}).toArray();
   },
-  async addVideo(owner_id, title, description, isPrivate, file_path) {
+  async addVideo(owner_id, title, description, isPrivate) {
     //TODO: verify this
     owner_id = validation.checkId(owner_id, "Owner ID");
     title = validation.checkString(title, "Title");
     description = validation.checkString(description, "Description");
     isPrivate = validation.checkBoolean(isPrivate, "Private");
-    file_path = validation.checkString(file_path, "File Path");
+    // file_path = validation.checkString(file_path, "File Path");
 
     const newVideo = {
       owner_id: owner_id,
@@ -29,7 +31,6 @@ const exportedMethods = {
       description: description,
       private: isPrivate,
       whitelisted_users: [],
-      file_path: file_path,
       created_at: new Date(),
     };
 
