@@ -7,7 +7,7 @@
             {{#each videos}}
             <article class="video-card">
                 <div class="thumbnail-container">
-                    <img src="{{thumbnailUrl}}" alt="{{title}}" class="video-thumbnail">
+                    <img src="watch/thumbnail/{{_id}}" alt="{{title}}" class="video-thumbnail">
                     <span class="video-duration">{{duration}}</span>
                 </div>
                 <div class="video-info">
@@ -16,8 +16,8 @@
                         <h3 class="video-title">{{title}}</h3>
                         <a href="/channel/{{channelId}}" class="channel-name">{{channelName}}</a>
                         <div class="video-meta">
-                            <span>{{views}} views</span>
-                            <span>{{likes}} likes</span>
+                            <span>{{view_count}} views</span>
+                            <span>{{like_count}} likes</span>
                             <span>{{publishedAt}}</span>
                         </div>
                     </div>

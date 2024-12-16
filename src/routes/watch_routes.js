@@ -2,14 +2,26 @@ import router from "./internal_routes.js";
 import { videoData } from "../data/index.js";
 import * as fs from "node:fs";
 import {mediaConfig} from "../config/settings.js";
+import * as path from 'path';
+
+//middleware to ensure user is logged i
+const ensureAuthenticated = (req, res, next) => {
+  if (req.session && req.session.AuthenticationState) {
+    return next();
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+};
 
 router.route("/:id").get(async (req, res) => {
   if (req.session && req.session.AuthenticationState) {
     try {
       const video = await videoData.getVideoById(req.params.id);
-      // console.log(req.session.AuthenticationState.user);
       let user = req.session.AuthenticationState.user;
       let initials = user.firstName[0] + user.lastName[0];
+
+      await videoData.addView(req.params.id); // increment the view count
+
       res.render("watch", {
         user: req.session.AuthenticationState.user,
         initials: initials,
@@ -55,11 +67,26 @@ router.route("/video/:id").get(async (req, res) => {
 
       return stream.pipe(res);
     } catch (e) {
-      return res.status(400).redirect("/homepage");
+      return res.redirect("/homepage");
     }
   } else {
     return res.status(401).redirect("/intro");
   }
+});
+
+// route for the video thumbnail
+router.route("/thumbnail/:id").get( ensureAuthenticated, async (req, res) => {
+    try {
+        const video = await videoData.getVideoById(req.params.id);
+        const thumbnailPath = `${mediaConfig.uploadDir}/${video.owner_id}/${video._id}.png`;
+
+        // return res.sendFile(thumbnailPath); //path must be absolute or specify root to res.sendFile
+        return res.sendFile(path.resolve(thumbnailPath));
+
+    } catch (e) {
+        return res.status(404)
+    }
+
 });
 
 export default router;
