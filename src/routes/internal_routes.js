@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { users } from "../config/mongoCollections.js";
-import { videoData } from "../data/index.js";
+import { userData, videoData } from "../data/index.js";
 import validation from "../utils/validation.js";
 
 const router = Router();
@@ -94,19 +93,27 @@ router
   })
   .post(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
-      try {
-        await users.updateUserPatch(
-          req.session.AuthenticationState.user._id,
-          req.body,
-        );
-      } catch (e) {
-        return res.status(400).redirect("/settings");
-      }
-      console.log(req.session.AuthenticationState.user);
       let user = req.session.AuthenticationState.user;
       let initials = user.firstName[0] + user.lastName[0];
+      try {
+        // todo: add validation new_password vs confirm_password
+        // todo: add validation password
+        req.session.user = await userData.updateUserPatch(
+          req.session.AuthenticationState.user._id,
+          {
+            password: req.body.newPassword,
+          },
+        );
+
+      } catch (e) {
+        return res.status(400).render("settings", {
+          user: req.session.AuthenticationState.user,
+          initials: initials,
+          errorMessage: e.message,
+        });
+      }
       res.render("settings", {
-        user: req.session.AuthenticationState.user,
+        user: req.session.user,
         initials: initials,
       });
     } else {
