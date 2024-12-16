@@ -23,10 +23,23 @@ const handlebarsInstance = exphbs.create({
         return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
       return new Handlebars.SafeString(JSON.stringify(obj));
     },
+    add: (a, b) => a + b,
+    subtract: (a, b) => a - b,
+    eq: (a, b) => a === b,
+    gt: (a, b) => a > b,
+    lt: (a, b) => a < b,
+    range: (start, end) => {
+        let range = [];
+        for (let i = start; i <= end; i++) {
+            range.push(i);
+        }
+        return range;
+    },
   },
   partialsDir: path.join(__dirname, 'views/partials'),
 });
 
+app.use("/data", express.static(__dirname + "/../data"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
