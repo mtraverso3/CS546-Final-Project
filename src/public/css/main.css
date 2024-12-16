@@ -2172,6 +2172,7 @@ img {
 
 .upload-btn,
 .cancel-btn {
+    text-decoration: none;
     padding: 12px 24px;
     border-radius: 12px;
     font-size: 16px;
@@ -2221,6 +2222,47 @@ img {
     }
 }
 
+.upload-preview {
+    margin-top: 20px;
+    width: 100%;
+}
+
+#video-preview {
+    width: 100%;
+    max-height: 400px;
+    background: #000;
+}
+
+.thumbnail-preview-wrapper {
+    position: relative;
+    margin-top: 20px;
+}
+
+.thumbnail-preview-wrapper img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+}
+
+.change-video-btn,
+.change-thumbnail-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.change-video-btn:hover,
+.change-thumbnail-btn:hover {
+    background: #444;
+}
+
+/* ERROR STYLES */
+
 .alert {
     color: #ff0000;
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
 }

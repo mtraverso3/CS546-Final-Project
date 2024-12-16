@@ -53,6 +53,27 @@
                     {{/each}}
                 </div>
             </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Get the tab parameter from URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const activeTab = urlParams.get('tab');
+
+                    if (activeTab) {
+                        // Remove active class from all tabs
+                        document.querySelectorAll('.tab-button').forEach(tab => {
+                            tab.classList.remove('active');
+                        });
+
+                        // Add active class to the specified tab
+                        const targetTab = document.querySelector(`.tab-button[data-tab="${activeTab}"]`);
+                        if (targetTab) {
+                            targetTab.classList.add('active');
+                        }
+                    }
+                });
+            </script>
         </div>
     </main>
 </div>
