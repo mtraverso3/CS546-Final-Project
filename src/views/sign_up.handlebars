@@ -8,9 +8,7 @@
             <p>begin your journey</p>
         </div>
 
-        {{#if error}}
-            <div class="error-message">{{error}}</div>
-        {{/if}}
+        
 
         <form id="signup-form" method="POST" action="/signup">
             <div class="form-group">
@@ -52,6 +50,9 @@
                 <a href="/intro" class="create-account">Already have an account?</a>
                 <button type="submit" class="login-button">Create Account</button>
             </div>
+            {{#if error}}
+                <div class="error-message">{{error}}</div>
+            {{/if}}
             <div class="hidden" id="error-div">
                 <div class="alert alert-danger text-goes-here">
                 </div>

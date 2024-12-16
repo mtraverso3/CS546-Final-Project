@@ -30,6 +30,7 @@ const exportedMethods = {
       title: title,
       description: description,
       private: isPrivate,
+      tags: [],
       whitelisted_users: [],
       created_at: new Date(),
     };
@@ -52,6 +53,15 @@ const exportedMethods = {
         updatedVideo.title,
         "Title",
       );
+    }
+
+    if (updatedVideo.tags){
+      if(!Array.isArray(updatedVideo.tags)){
+        throw new Error("tags must be an array")
+      }
+      for(let i = 0; i < updatedVideo.tags.length; i++){
+        updatedVideo.tags[i] = validation.checkString(updatedVideo.tags[i], "Tag");
+      }
     }
 
     if (updatedVideo.description) {
@@ -164,6 +174,61 @@ const exportedMethods = {
     if (!video) throw new Error("Video not found");
 
     return video.whitelisted_users;
+  },
+  async addTag(videoId, userId) {
+    //TODO: verify this
+    videoId = validation.checkId(videoId, "Video ID");
+    tag = validation.checkString(tag, "tag")
+    const videoCollection = await videos();
+    const updatedInfo = await videoCollection.updateOne(
+      { _id: videoId },
+      { $addToSet: { tags: tag } },
+    );
+    if (updatedInfo.modifiedCount === 0) {
+      throw new Error("Could not add tag");
+    }
+
+    return await this.getVideoById(videoId);
+  },
+  async removeTag(videoId, tag) {
+    //TODO: verify this
+    videoId = validation.checkId(videoId, "Video ID");
+    tag = validation.checkString(tag, "tag")
+    const videoCollection = await videos();
+    const updatedInfo = await videoCollection.updateOne(
+      { _id: videoId },
+      { $pull: { whitelisted_users: tag } },
+    );
+    if (updatedInfo.modifiedCount === 0) {
+      throw new Error("Could not remove tag");
+    }
+
+    return await this.getVideoById(videoId);
+  },
+  async removeAllTags(videoId) {
+    //TODO: verify this
+    videoId = validation.checkId(videoId);
+
+    const videoCollection = await videos();
+    const updatedInfo = await videoCollection.updateOne(
+      { _id: videoId },
+      { $set: { tags: [] } },
+    );
+    if (updatedInfo.modifiedCount === 0) {
+      throw new Error("Could not remove all tags");
+    }
+
+    return await this.getVideoById(videoId);
+  },
+  async getTags(videoId) {
+    //TODO: verify this
+    videoId = validation.checkId(videoId);
+
+    const videoCollection = await video();
+    const video = await videoCollection.findOne({ _id: videoId });
+    if (!video) throw new Error("Video not found");
+
+    return video.tags;
   },
   async getVideoByOwner(ownerId) {
     //TODO: verify this

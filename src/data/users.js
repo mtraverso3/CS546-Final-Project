@@ -52,6 +52,7 @@ const exportedMethods = {
         profile_public: true,
       },
       dob: dob,
+      likedTags: [],
       created_at: new Date(),
       modified_at: new Date(),
     };
@@ -93,6 +94,14 @@ const exportedMethods = {
       );
       updatedUserData.password_hash = await bcrypt.hash(updatedUserData.password, bcryptConfig.saltRounds);
       delete updatedUserData.password;
+    }
+    if (updatedUser.likedTags){
+      if(!Array.isArray(updatedUser.likedTags)){
+        throw new Error("tags must be an array")
+      }
+      for(let i = 0; i < updatedUser.likedTags.length; i++){
+        updatedUser.likedTags[i] = validation.checkString(updatedUser.likedTags[i], "Tag");
+      }
     }
     if (updatedUser.dob) {
       updatedUserData.dob = validation.checkDOB(updatedUser.dob);
