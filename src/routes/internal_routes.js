@@ -228,4 +228,20 @@ router.route("/likes/:videoId").post(async (req, res) => {
   }
 });
 
+router
+.route("/upload")
+.get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    let user = req.session.AuthenticationState.user;
+    let initials = user.firstName[0] + user.lastName[0];
+    return res.render("upload", {
+      user: req.session.AuthenticationState.user,
+      initials: initials,
+    });
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
+
+
 export default router;
