@@ -22,7 +22,7 @@ router
     }
   })
   .post(async (req, res) => {
-    let user = xss(req.body);
+    let user = req.body;
     if (!user.email || !user.password) {
       return res.status(400).render("intro", {
         title: "Sign Up",
@@ -70,7 +70,7 @@ router
     }
   })
   .post(async (req, res) => {
-    let user = xss(req.body)
+    let user = req.body
     try {
       user.firstName = validation.checkName(user.firstName);
       user.lastName = validation.checkName(user.lastName);
