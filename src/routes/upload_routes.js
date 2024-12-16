@@ -41,10 +41,7 @@ router.post(
   "/",
   ensureAuthenticated,
   multer({ storage: storage }).fields([
-    {
-      name: "video",
-      maxCount: 1,
-    },
+    { name: "video", maxCount: 1 },
     { name: "thumbnail", maxCount: 1 },
   ]),
   async (req, res) => {
@@ -68,7 +65,7 @@ router.post(
         fs.mkdirSync(path.dirname(thumbnailPath), { recursive: true });
 
         fs.renameSync(req.files.video[0].path, videoPath);
-        fs.renameSync(req.files.files[0].path, thumbnailPath);
+        fs.renameSync(req.files.thumbnail[0].path, thumbnailPath);
 
         return res.status(200).redirect("/profile?tab=videos"); //change made here from homepage to this
       } catch (e) {

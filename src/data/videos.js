@@ -1,7 +1,6 @@
 import { comments, videos } from "../config/mongoCollections.js";
 import validation from "../utils/validation.js";
-
-
+import {ObjectId} from "mongodb";
 
 const exportedMethods = {
   async getVideoById(id) {
@@ -33,6 +32,9 @@ const exportedMethods = {
       tags: [],
       whitelisted_users: [],
       created_at: new Date(),
+      like_count: 0,
+      dislike_count: 0,
+      view_count: 0,
     };
 
     const videoCollection = await videos();
@@ -243,6 +245,22 @@ const exportedMethods = {
       .find({ title: { $regex: search, $options: "i" } })
       .toArray();
   },
+  async addView(videoId) {
+    videoId = validation.checkId(videoId, "Video ID");
+    const videoCollection = await videos();
+    const video = await this.getVideoById(videoId.toString());
+    const updatedInfo = await videoCollection.updateOne(
+      { _id: videoId,
+      },
+      { $inc: { view_count: 1 } },
+    );
+
+    if (updatedInfo.modifiedCount === 0) {
+      throw new Error("Could not increase video views count");
+    }
+
+    return { view_count: video.view_count + 1 };
+  }
 };
 
 export default exportedMethods;
