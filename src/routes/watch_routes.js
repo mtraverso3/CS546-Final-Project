@@ -32,7 +32,7 @@ router.route("/video/:id").get(async (req, res) => {
 
       const range = req.headers.range;
 
-      const videoPath = `${mediaConfig.uploadDir}/${video.owner_id}/${video._id}`;
+      const videoPath = `${mediaConfig.uploadDir}/${video.owner_id}/${video._id}.mp4`;
 
       const videoSize = fs.statSync(videoPath).size;
       const chunkSize = 1e6;
