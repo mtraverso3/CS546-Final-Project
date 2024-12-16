@@ -16,7 +16,7 @@
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke-width="2" stroke-linecap="round"/>
                             </svg>
                             <h3>Drag and drop your video or click to browse</h3>
-                            <p>MP4, WebM or Ogg file. Maximum file size 2GB.</p>
+                            <p>MP4 file. Maximum file size 2GB.</p>
                         </div>
                         <div class="upload-preview" id="upload-preview" style="display: none;">
                             <video id="video-preview" controls></video>
@@ -48,7 +48,7 @@
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke-width="2" stroke-linecap="round"/>
                                     </svg>
-                                    <p>Click to upload thumbnail</p>
+                                    <p>JPEG or PNG file. Click to upload thumbnail</p>
                                 </div>
                             </div>
                             <div class="thumbnail-preview" id="thumbnail-preview"></div>
@@ -58,7 +58,7 @@
                             <label for="visibility">Visibility</label>
                             <select id="visibility" name="visibility">
                                 <option value="public">Public</option>
-                                <option value="unlisted">Unlisted</option>
+                                {{!-- <option value="unlisted">Unlisted</option> --}}
                                 <option value="private">Private</option>
                             </select>
                         </div>
@@ -72,9 +72,98 @@
                         </div>
 
                         <div class="form-actions">
+                            {{!-- <a href="/profile?tab=videos" class="upload-btn">Test Redirect</a> --}} <!-- This is to test if it actually goes to the profile-tab's video tab -->
                             <button type="submit" class="upload-btn">Upload</button>
-                            <button type="button" class="cancel-btn">Cancel</button>
+                            <a href="/homepage" type="button" class="cancel-btn">Cancel</a>
                         </div>
+
+                        <!-- added for counting validation until you reach max character limit -->
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                // char count functionality
+                                const titleInput = document.getElementById('title');
+                                const titleCount = titleInput.parentElement.querySelector('.character-count');
+                                
+                                const descInput = document.getElementById('description');
+                                const descCount = descInput.parentElement.querySelector('.character-count');
+                                
+                                function updateCharCount(input, display, maxLength) {
+                                    input.addEventListener('input', function() {
+                                        const currentLength = this.value.length;
+                                        display.textContent = `${currentLength}/${maxLength}`;
+                                        
+                                        if (currentLength >= maxLength) {
+                                            display.style.color = '#ff4444';
+                                            if (currentLength > maxLength) {
+                                                this.value = this.value.slice(0, maxLength);
+                                            }
+                                        } else if (currentLength >= maxLength * 0.9) {
+                                            display.style.color = '#ffaa44';
+                                        } else {
+                                            display.style.color = '#00ff99';
+                                        }
+                                    });
+                                }
+
+                                // counters
+                                updateCharCount(titleInput, titleCount, 100);
+                                updateCharCount(descInput, descCount, 5000);
+
+                                // view preview functions
+                                const videoInput = document.getElementById('video-input');
+                                const videoPreview = document.getElementById('video-preview');
+                                const uploadPreview = document.getElementById('upload-preview');
+                                const uploadPlaceholder = document.querySelector('.upload-placeholder');
+
+                                videoInput.addEventListener('change', function(e) {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        const videoUrl = URL.createObjectURL(file);
+                                        videoPreview.src = videoUrl;
+                                        uploadPreview.style.display = 'block';
+                                        uploadPlaceholder.style.display = 'none';
+                                    }
+                                });
+
+                                const changeVideoBtn = document.querySelector('.change-video-btn');
+                                changeVideoBtn.addEventListener('click', function() {
+                                    videoInput.value = '';
+                                    videoPreview.src = '';
+                                    uploadPreview.style.display = 'none';
+                                    uploadPlaceholder.style.display = 'block';
+                                });
+
+                                // all thumnail previews
+                                const thumbnailInput = document.getElementById('thumbnail');
+                                const thumbnailPreview = document.getElementById('thumbnail-preview');
+                                const thumbnailPlaceholder = document.querySelector('.thumbnail-placeholder');
+
+                                thumbnailInput.addEventListener('change', function(e) {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        const reader = new FileReader();
+                                        reader.onload = function(e) {
+                                            thumbnailPreview.innerHTML = `
+                                                <div class="thumbnail-preview-wrapper">
+                                                    <img src="${e.target.result}" alt="Thumbnail preview">
+                                                    <button type="button" class="change-thumbnail-btn">Change Thumbnail</button>
+                                                </div>
+                                            `;
+                                            thumbnailPreview.style.display = 'block';
+                                            thumbnailPlaceholder.style.display = 'none';
+
+                                            document.querySelector('.change-thumbnail-btn').addEventListener('click', function() {
+                                                thumbnailInput.value = '';
+                                                thumbnailPreview.innerHTML = '';
+                                                thumbnailPreview.style.display = 'none';
+                                                thumbnailPlaceholder.style.display = 'block';
+                                            });
+                                        };
+                                        reader.readAsDataURL(file);
+                                    }
+                                });
+                            });
+                        </script>
                     </div>
                 </form>
             </div>
