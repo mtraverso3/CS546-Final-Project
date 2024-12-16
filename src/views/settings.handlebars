@@ -28,6 +28,13 @@
                                    placeholder="Confirm New Password"/>
                         </div>
                     </div>
+                    {{#if error}}
+                        <div class="error-message">{{error}}</div>
+                    {{/if}}
+                    <div class="hidden" id="error-div">
+                        <div class="alert alert-danger text-goes-here">
+                        </div>
+                    </div>
 
                     <!-- Profile Settings -->
                     {{!-- <div class="settings-section">

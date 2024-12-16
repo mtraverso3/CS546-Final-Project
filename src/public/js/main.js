@@ -412,21 +412,59 @@
     
     let signUpForm = document.getElementById('signup-form');
     let loginForm = document.getElementById('login-form');
+    let settingsForm = document.getElementById('settings-form');
+
+    if(settingsForm){
+        let email = document.getElementById('email');
+        let password = document.getElementById('current-password');
+        let newPassword = document.getElementById('new-password');
+        let confirmPassword = document.getElementById('confirm-password');
+        let errorDiv = document.getElementById('error-div');
+        let errorTextElement = errorDiv.getElementsByClassName('text-goes-here')[0];
+        settingsForm.addEventListener('submit', (event) => {
   
-    if (loginForm) {
-      // We can store references to our elements; it's better to
-      // store them once rather than re-query the DOM traversal each time
-      // that the event runs.
-      let email = document.getElementById('email');
-      let password = document.getElementById('password');
+            try {
+              // hide containers by default
+              errorDiv.classList.add('hidden');
+      
+              // Values come from inputs as strings, no matter what :(
+              let userEmail = email.value;
+              let userPassword = password.value;
+              let userNewPassword = newPassword.value
+              let confirmNewPassword = confirmPassword.value
+              
+              userEmail = checkEmail(userEmail)
+              userPassword = checkPassword(userPassword)
+              userNewPassword = checkPassword(userNewPassword)
+              confirmNewPassword = checkPassword(confirmNewPassword)
+
+      
+            } catch (e) {
+              //const message = typeof e === 'string' ? e : e.message;
+              event.preventDefault();
+    
+              errorTextElement.textContent = e;
+              errorDiv.classList.remove('hidden');
+            }
+          });
+        }
+    
+    
   
-      let errorDiv = document.getElementById('error-div');
-      let errorTextElement = errorDiv.getElementsByClassName('text-goes-here')[0];
-  
-  
-      // We can take advantage of functional scoping; our event listener has access to its outer functional scope
-      // This means that these variables are accessible in our callback
-      loginForm.addEventListener('submit', (event) => {
+    if(loginForm) {
+        // We can store references to our elements; it's better to
+        // store them once rather than re-query the DOM traversal each time
+        // that the event runs.
+        let email = document.getElementById('email');
+        let password = document.getElementById('password');
+    
+        let errorDiv = document.getElementById('error-div');
+        let errorTextElement = errorDiv.getElementsByClassName('text-goes-here')[0];
+    
+    
+        // We can take advantage of functional scoping; our event listener has access to its outer functional scope
+        // This means that these variables are accessible in our callback
+        loginForm.addEventListener('submit', (event) => {
   
         try {
           // hide containers by default

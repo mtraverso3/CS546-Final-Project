@@ -3,6 +3,7 @@ import { Router } from "express";
 const router = Router();
 import validation from "../utils/validation.js";
 import userData from "../data/users.js";
+import xss from 'xss';
 
 router.route("/").get(async (req, res) => {
   return res.redirect("/intro");
@@ -21,11 +22,12 @@ router
     }
   })
   .post(async (req, res) => {
-    let user = req.body;
+    let user = xss(req.body);
     if (!user.email || !user.password) {
       return res.status(400).render("intro", {
         title: "Sign Up",
         layout: "sign_up_layout",
+        error: "email and password must be supplied"
       });
     }
 
@@ -36,7 +38,7 @@ router
       return res.status(400).render("intro", {
         title: "Sign Up",
         layout: "sign_up_layout",
-        errorMessage: e.message,
+        error: e.message,
       });
     }
     try {
@@ -51,7 +53,7 @@ router
       return res.status(401).render("intro", {
         title: "Sign Up",
         layout: "sign_up_layout",
-        errorMessage: e.message,
+        error: e.message,
       });      
     }
   });
@@ -68,7 +70,7 @@ router
     }
   })
   .post(async (req, res) => {
-    let user = req.body;
+    let user = xss(req.body)
     try {
       user.firstName = validation.checkName(user.firstName);
       user.lastName = validation.checkName(user.lastName);

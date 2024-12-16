@@ -31,9 +31,11 @@
                 <a href="/signup" class="create-account">Create account</a>
                 <button type="submit" class="login-button">Sign In</button>
             </div>
+            {{#if error}}
+                <div class="error-message">{{error}}</div>
+            {{/if}}
             <div class="hidden" id="error-div">
                 <div class="alert alert-danger text-goes-here">
-                    <p>{{errorMessage}}</p>
                 </div>
             </div>
         </form>
