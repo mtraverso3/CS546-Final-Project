@@ -91,6 +91,8 @@ const exportedMethods = {
         updatedUser.password,
         "Password",
       );
+      updatedUserData.password_hash = await bcrypt.hash(updatedUserData.password, bcryptConfig.saltRounds);
+      delete updatedUserData.password;
     }
     if (updatedUser.dob) {
       updatedUserData.dob = validation.checkDOB(updatedUser.dob);
@@ -203,6 +205,7 @@ const exportedMethods = {
       lastName: user.last_name,
       email: user.email,
       username: user.username,
+      _id: user._id.toString(),
       dob: user.dob}
   }
 };
