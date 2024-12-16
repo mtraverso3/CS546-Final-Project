@@ -36,6 +36,7 @@ router
       return res.status(400).render("intro", {
         title: "Sign Up",
         layout: "sign_up_layout",
+        errorMessage: e.message,
       });
     }
     try {
@@ -47,7 +48,11 @@ router
 
       res.redirect("/homepage");
     } catch (e) {
-      return res.status(401).redirect("/intro");
+      return res.status(401).render("intro", {
+        title: "Sign Up",
+        layout: "sign_up_layout",
+        errorMessage: e.message,
+      });      
     }
   });
 
