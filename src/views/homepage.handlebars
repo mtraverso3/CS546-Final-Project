@@ -5,38 +5,34 @@
         <div class="video-grid">
             <!-- Video Card Template -->
             {{#each videos}}
-            <article class="video-card">
-                <div class="thumbnail-container">
-                    <img src="watch/thumbnail/{{_id}}" alt="{{title}}" class="video-thumbnail">
-                    <span class="video-duration">{{duration}}</span>
-                </div>
-                <div class="video-info">
-                    <div class="channel-avatar">{{channelInitial}}</div>
-                    <div class="video-details">
-                        <h3 class="video-title">{{title}}</h3>
-                        <a href="/channel/{{channelId}}" class="channel-name">{{channelName}}</a>
-                        <div class="video-meta">
-                            <span>{{view_count}} views</span>
-                            <span>{{like_count}} likes</span>
-                            <span>{{publishedAt}}</span>
-                        </div>
-                    </div>
-                </div>
-            </article>
+            {{> video-card}}
             {{/each}}
         </div>
 
         <!-- Pagination -->
         <div class="pagination">
-            <button class="page-btn" disabled>Previous</button>
-            <div class="page-numbers">
-                <button class="page-btn active">1</button>
-                <button class="page-btn">2</button>
-                <button class="page-btn">3</button>
-                <span>...</span>
-                <button class="page-btn">10</button>
-            </div>
-            <button class="page-btn">Next</button>
+            {{#if (gt currentPage 1)}}
+            <a href="?page={{subtract currentPage 1}}" class="page-btn">Previous</a>
+            {{else}}
+            <span class="page-btn disabled">Previous</span>
+            {{/if}}
+
+            {{#each (range 1 totalPages)}}
+            <a href="?page={{this}}" class="page-btn {{#if (eq ../currentPage this)}}active{{/if}}">
+                {{this}}
+            </a>
+            {{/each}}
+
+            {{#if (lt currentPage totalPages)}}
+            <a href="?page={{add currentPage 1}}" class="page-btn">Next</a>
+            {{else}}
+            <span class="page-btn disabled">Next</span>
+            {{/if}}
         </div>
+
+
+
+
+
     </main>
 </div>

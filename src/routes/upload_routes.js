@@ -30,10 +30,11 @@ const storage = multer.diskStorage({
   },
 });
 
+
 router.get("/", ensureAuthenticated, async (req, res) => {
-  return res.render("upload", {
-    user: req.session.user,
-  });
+    return res.render("upload", {
+      user: req.session.user,
+    });
 });
 
 // two files, "video" and "thumbnail"
@@ -41,7 +42,10 @@ router.post(
   "/",
   ensureAuthenticated,
   multer({ storage: storage }).fields([
-    { name: "video", maxCount: 1 },
+    {
+      name: "video",
+      maxCount: 1,
+    },
     { name: "thumbnail", maxCount: 1 },
   ]),
   async (req, res) => {
@@ -51,7 +55,7 @@ router.post(
           req.session.user._id,
           req.body.title,
           req.body.description,
-          req.body.visibility === "private"
+          req.body.visibility === "private",
         );
 
         if (!video) throw new Error("Could not add video");
@@ -67,14 +71,14 @@ router.post(
         fs.renameSync(req.files.video[0].path, videoPath);
         fs.renameSync(req.files.thumbnail[0].path, thumbnailPath);
 
-        return res.status(200).redirect("/profile?tab=videos"); //change made here from homepage to this
+        return res.status(200).redirect("/homepage");
       } catch (e) {
-        return res.status(400).redirect("/profile?tab=videos");
+        return res.status(400).redirect("/homepage");
       }
     } else {
-      return res.status(400).redirect("/profile?tab=videos");
+      return res.status(400).redirect("/homepage");
     }
-  }
+  },
 );
 
 export default router;

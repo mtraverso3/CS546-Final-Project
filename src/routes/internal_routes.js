@@ -4,12 +4,14 @@ import validation from "../utils/validation.js";
 
 const router = Router();
 
+const PAGE_SIZE = 3; // Number of videos per page
+
 router
   .route("/search")
   .post(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
       try {
-        req.body.search = validation.checkString(req.body.search);
+        req.body.search = validation.checkString(req.body.search);        
 
         const v = await videoData.getAllVideosMatching(req.body.search);
         // console.log(req.session.AuthenticationState.user);
@@ -46,13 +48,18 @@ router.route("/homepage").get(async (req, res) => {
   if (req.session && req.session.AuthenticationState) {
     try {
       const v = await videoData.getAllVideos();
-      // console.log(req.session.AuthenticationState.user);
+      const page = parseInt(req.query.page || "1", 10);
+      const totalPages = Math.ceil(v.length / PAGE_SIZE);
+      const startIndex = (page - 1) * PAGE_SIZE;
+      const endIndex = startIndex + PAGE_SIZE;
       let user = req.session.AuthenticationState.user;
       let initials = user.firstName[0] + user.lastName[0];
       res.render("homepage", {
         user: req.session.AuthenticationState.user,
         initials: initials,
-        videos: v,
+        videos: v.slice(startIndex, endIndex),
+        currentPage: page,
+        totalPages,        
       });
     } catch (e) {
       return res.status(500).redirect("/intro");
@@ -67,9 +74,11 @@ router.route("/profile").get(async (req, res) => {
     // console.log(req.session.AuthenticationState.user);
     let user = req.session.AuthenticationState.user;
     let initials = user.firstName[0] + user.lastName[0];
+    const userVideos = await videoData.getVideoByOwner(user._id);
     res.render("profile", {
       user: req.session.AuthenticationState.user,
       initials: initials,
+      videos: userVideos,
     });
   } else {
     return res.status(401).redirect("/intro");
@@ -99,6 +108,7 @@ router
         // todo: add validation new_password vs confirm_password
         // todo: add validation password
         req.session.user = await userData.updateUserPatch(
+
           req.session.AuthenticationState.user._id,
           {
             firstName: req.body.firstName,
@@ -107,7 +117,7 @@ router
             username: req.body.username,
             dob: req.body.dob,
             password: req.body.newPassword,
-          }
+          },
         );
 
         const visibility = await userData.updateUserVisibilityPatch(
@@ -118,6 +128,7 @@ router
             profilePublic: req.body.profilePublic,
           }
         );
+
       } catch (e) {
         return res.status(400).render("settings", {
           user: req.session.AuthenticationState.user,
@@ -225,5 +236,21 @@ router.route("/likes/:videoId").post(async (req, res) => {
     return res.status(401).redirect("/intro");
   }
 });
+
+router
+.route("/upload")
+.get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    let user = req.session.AuthenticationState.user;
+    let initials = user.firstName[0] + user.lastName[0];
+    return res.render("upload", {
+      user: req.session.AuthenticationState.user,
+      initials: initials,
+    });
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
+
 
 export default router;
