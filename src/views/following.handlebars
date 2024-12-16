@@ -1,0 +1,24 @@
+<div class="app-container">
+    {{> nav}}
+    {{> sidebar}}
+    <main class="main-content">
+        <h1 class="page-title" style="color: #fff; margin-bottom: 32px;">Following</h1>
+        <div class="following-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
+            {{#each followedChannels}}
+            <div class="channel-card" style="background: rgba(21, 21, 21, 0.8); border: 1px solid #1df2f0; border-radius: 16px; padding: 20px; transition: all 0.3s;">
+                <div class="channel-header" style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+                    <div class="channel-avatar" style="width: 64px; height: 64px; background: linear-gradient(45deg, #1df2f0, #E94BE8); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white;">
+                        {{channelInitial}}
+                    </div>
+                    <div class="channel-info">
+                        <h3 style="color: #fff; margin: 0;">{{channelName}}</h3>
+                        <p style="color: #1df2f0; margin: 4px 0;">{{subscribers}} subscribers</p>
+                    </div>
+                </div>
+                <p class="channel-description" style="color: #fff; margin-bottom: 16px;">{{description}}</p>
+                <button class="unfollow-btn" style="background: linear-gradient(45deg, #1df2f0, #E94BE8); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">Unfollow</button>
+            </div>
+            {{/each}}
+        </div>
+    </main>
+</div>

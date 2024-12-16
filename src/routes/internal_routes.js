@@ -107,7 +107,7 @@ router
             username: req.body.username,
             dob: req.body.dob,
             password: req.body.newPassword,
-          },
+          }
         );
 
         const visibility = await userData.updateUserVisibilityPatch(
@@ -118,7 +118,6 @@ router
             profilePublic: req.body.profilePublic,
           }
         );
-
       } catch (e) {
         return res.status(400).render("settings", {
           user: req.session.AuthenticationState.user,
@@ -134,5 +133,97 @@ router
       return res.status(401).redirect("/intro");
     }
   });
+
+router.route("/following").get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    try {
+      const followedChannels = [];
+      let user = req.session.AuthenticationState.user;
+      let initials = user.firstName[0] + user.lastName[0];
+
+      res.render("following", {
+        user: req.session.AuthenticationState.user,
+        initials: initials,
+        followedChannels: followedChannels,
+      });
+    } catch (e) {
+      return res.status(400).redirect("/homepage");
+    }
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
+
+router.route("/playlists").get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    try {
+      const playlists = [];
+      let user = req.session.AuthenticationState.user;
+      let initials = user.firstName[0] + user.lastName[0];
+
+      res.render("playlists", {
+        user: req.session.AuthenticationState.user,
+        initials: initials,
+        playlists: playlists,
+      });
+    } catch (e) {
+      return res.status(400).redirect("/homepage");
+    }
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
+
+router.route("/comments").get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    try {
+      const comments = [];
+      let user = req.session.AuthenticationState.user;
+      let initials = user.firstName[0] + user.lastName[0];
+
+      res.render("yourcomments", {
+        user: req.session.AuthenticationState.user,
+        initials: initials,
+        comments: comments,
+      });
+    } catch (e) {
+      return res.status(400).redirect("/homepage");
+    }
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
+
+router.route("/likes").get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    try {
+      const likedVideos = [];
+      let user = req.session.AuthenticationState.user;
+      let initials = user.firstName[0] + user.lastName[0];
+
+      res.render("likedvideos", {
+        user: req.session.AuthenticationState.user,
+        initials: initials,
+        likedVideos: likedVideos,
+      });
+    } catch (e) {
+      return res.status(400).redirect("/homepage");
+    }
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
+
+router.route("/likes/:videoId").post(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    try {
+      res.redirect(`/watch/${req.params.videoId}`);
+    } catch (e) {
+      return res.status(400).redirect("/homepage");
+    }
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
 
 export default router;
