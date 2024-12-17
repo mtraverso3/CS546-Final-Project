@@ -1,0 +1,184 @@
+<div class="app-container">
+    {{> nav}}
+    {{> sidebar}}
+    
+    <main class="main-content">
+        <div class="edit-container">
+            <h1 class="page-title">Edit Video</h1>
+            
+            <div class="edit-wrapper">
+                <form id="edit-form" method="POST" action="/videos/{{video._id}}/edit" enctype="multipart/form-data">
+                    <!-- video preview -->
+                    <div class="video-preview-section">
+                        <video id="video-preview" src="{{video.videoUrl}}" controls></video>
+                    </div>
+
+                    <!-- video deets -->
+                    <div class="video-details">
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" name="title" value="{{video.title}}" required maxlength="100" 
+                                   placeholder="Add a title that describes your video">
+                            <span class="character-count">{{video.title.length}}/100</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" rows="4" maxlength="5000"
+                                    placeholder="Tell viewers about your video">{{video.description}}</textarea>
+                            <span class="character-count">{{video.description.length}}/5000</span>
+                        </div>
+
+                        <!-- thumbnail section -->
+                        <div class="form-group">
+                            <label for="thumbnail">Thumbnail</label>
+                            <div class="thumbnail-container">
+                                <div class="current-thumbnail">
+                                    <img src="{{video.thumbnailUrl}}" alt="Current thumbnail">
+                                </div>
+                                <div class="thumbnail-input-container">
+                                    <input type="file" id="thumbnail" name="thumbnail" accept="image/*" class="file-input">
+                                    <div class="thumbnail-placeholder">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                        <p>Upload new thumbnail (JPEG or PNG)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- tags section -->
+                        <div class="form-group">
+                            <label for="tags">Tags</label>
+                            <div class="tags-input-container">
+                                <div class="tags-input-wrapper">
+                                    <input type="text" id="tag-input" placeholder="Add a tag">
+                                    <button type="button" id="add-tag-btn" class="add-tag-button">Add</button>
+                                </div>
+                                <div class="tags-list" id="tags-list">
+                                    {{#each video.tags}}
+                                        <span class="tag-item">
+                                            {{this}}
+                                            <button type="button" class="remove-tag-btn" data-tag="{{this}}">×</button>
+                                            <input type="hidden" name="tags[]" value="{{this}}">
+                                        </span>
+                                    {{/each}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="visibility">Visibility</label>
+                            <select id="visibility" name="visibility">
+                                <option value="public" {{#if (eq video.visibility "public")}}selected{{/if}}>Public</option>
+                                <option value="private" {{#if (eq video.visibility "private")}}selected{{/if}}>Private</option>
+                            </select>
+                        </div>
+
+                        {{#if error}}
+                            <div class="error-message">{{error}}</div>
+                        {{/if}}
+                        <div class="hidden" id="error-div">
+                            <div class="alert alert-danger text-goes-here"></div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="save-button">Save Changes</button>
+                            <a href="/videos/{{video._id}}" class="cancel-button">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // character count (in uploads too)
+    function setupCharCount(input, display, maxLength) {
+        function updateCount() {
+            const currentLength = input.value.length;
+            display.textContent = `${currentLength}/${maxLength}`;
+            
+            if (currentLength >= maxLength) {
+                display.style.color = '#ff4444';
+            } else if (currentLength >= maxLength * 0.9) {
+                display.style.color = '#ffaa44';
+            } else {
+                display.style.color = '#00ff99';
+            }
+        }
+        
+        input.addEventListener('input', updateCount);
+        updateCount();
+    }
+
+    setupCharCount(
+        document.getElementById('title'),
+        document.querySelector('#title + .character-count'),
+        100
+    );
+    
+    setupCharCount(
+        document.getElementById('description'),
+        document.querySelector('#description + .character-count'),
+        5000
+    );
+
+    // thumbnail preview
+    const thumbnailInput = document.getElementById('thumbnail');
+    const currentThumbnail = document.querySelector('.current-thumbnail');
+    const thumbnailPlaceholder = document.querySelector('.thumbnail-placeholder');
+
+    thumbnailInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentThumbnail.innerHTML = `
+                    <img src="${e.target.result}" alt="New thumbnail">
+                    <button type="button" class="revert-thumbnail-btn">Revert to Original</button>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // for tags
+    const tagInput = document.getElementById('tag-input');
+    const addTagBtn = document.getElementById('add-tag-btn');
+    const tagsList = document.getElementById('tags-list');
+
+    function addTag(tagText) {
+        if (tagText.trim() === '') return;
+        
+        const tagSpan = document.createElement('span');
+        tagSpan.className = 'tag-item';
+        tagSpan.innerHTML = `
+            ${tagText}
+            <button type="button" class="remove-tag-btn" data-tag="${tagText}">×</button>
+            <input type="hidden" name="tags[]" value="${tagText}">
+        `;
+        
+        tagsList.appendChild(tagSpan);
+        tagInput.value = '';
+    }
+
+    addTagBtn.addEventListener('click', () => addTag(tagInput.value));
+    
+    tagInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTag(tagInput.value);
+        }
+    });
+
+    tagsList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-tag-btn')) {
+            e.target.closest('.tag-item').remove();
+        }
+    });
+});
+</script>

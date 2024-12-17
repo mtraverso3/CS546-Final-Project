@@ -24,7 +24,6 @@
                         </div>
                         
                         <div class="video-actions">
-<!--                            instead we use forms and POST to /watch/like/:id or /watch/unlike/:id or /watch/dislike/:id or /watch/undislike/:id-->
                             <form id="like-form" method="POST" action="/watch/like/{{video._id}}">
                                 <button type="submit" class="action-btn">
                                     <span class="likes-count">{{video.like_count}}</span>
@@ -37,18 +36,6 @@
                                     Dislike
                                 </button>
                             </form>
-<!--                            download video button-->
-
-
-<!--                            <button class="action-btn">-->
-<!--                                <span class="likes-count">{{video.like_count}}</span>-->
-<!--                                Like-->
-<!--                            </button>-->
-<!--                            <button class="action-btn">-->
-<!--                                <span class="dislikes-count">{{video.dislike_count}}</span>-->
-<!--                                Dislike-->
-<!--                            </button>-->
-<!--                            <button class="action-btn">Share</button>-->
                         </div>
                     </div>
 
@@ -58,9 +45,9 @@
                             <div class="channel-avatar">{{video.channelInitial}}</div>
                             <div class="channel-details">
                                 <a href="/channel/{{video.channelId}}" class="channel-name">{{video.channelName}}</a>
-                                <span class="subscriber-count">{{video.subscriberCount}} subscribers</span>
+                                {{!-- <span class="subscriber-count">{{video.subscriberCount}} subscribers</span> --}}
                             </div>
-                            <button class="subscribe-btn">Subscribe</button>
+                            {{!-- <button class="subscribe-btn">Subscribe</button> --}}
                         </div>
                         
                         <div class="video-description">
@@ -78,7 +65,7 @@
                             <form id="comment-form" class="comment-form" method="POST" action="/comments/upload/{{video._id}}">
                                 <input id="comment" type="text" placeholder="Add a comment..." class="comment-input" name="comment">
                                 <div class="comment-actions">
-                                    <button type="button" class="cancel-btn">Cancel</button>
+                                    {{!-- <button type="button" class="cancel-btn">Cancel</button> --}}
                                     <button type="submit" class="comment-btn">Comment</button>
                                 </div>
                             </form>
@@ -111,7 +98,7 @@
             </div>
 
             <!-- related videos section -->
-            <div class="secondary-column">
+            {{!-- <div class="secondary-column">
                 <h3 class="related-header">Related Videos</h3>
                 <div class="related-videos">
                     {{#each relatedVideos}}
@@ -131,7 +118,7 @@
                     </a>
                     {{/each}}
                 </div>
-            </div>
+            </div> --}}
         </div>
     </main>
 </div>

@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { userData, videoData } from "../data/index.js";
 import validation from "../utils/validation.js";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { mediaConfig } from "../config/settings.js";
 
 const router = Router();
 
@@ -11,7 +15,7 @@ router
   .post(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
       try {
-        req.body.search = validation.checkString(req.body.search);        
+        req.body.search = validation.checkString(req.body.search);
 
         const v = await videoData.getAllVideosMatching(req.body.search);
         const v2 = await videoData.getVideoByTag(req.body.search);
@@ -61,7 +65,7 @@ router.route("/homepage").get(async (req, res) => {
         initials: initials,
         videos: v.slice(startIndex, endIndex),
         currentPage: page,
-        totalPages,        
+        totalPages,
       });
     } catch (e) {
       return res.status(500).redirect("/intro");
@@ -110,7 +114,6 @@ router
         // todo: add validation new_password vs confirm_password
         // todo: add validation password
         req.session.user = await userData.updateUserPatch(
-
           req.session.AuthenticationState.user._id,
           {
             firstName: req.body.firstName,
@@ -119,7 +122,7 @@ router
             username: req.body.username,
             dob: req.body.dob,
             password: req.body.newPassword,
-          },
+          }
         );
 
         const visibility = await userData.updateUserVisibilityPatch(
@@ -130,7 +133,6 @@ router
             profilePublic: req.body.profilePublic,
           }
         );
-
       } catch (e) {
         return res.status(400).render("settings", {
           user: req.session.AuthenticationState.user,
@@ -239,9 +241,7 @@ router.route("/likes/:videoId").post(async (req, res) => {
   }
 });
 
-router
-.route("/upload")
-.get(async (req, res) => {
+router.route("/upload").get(async (req, res) => {
   if (req.session && req.session.AuthenticationState) {
     let user = req.session.AuthenticationState.user;
     let initials = user.firstName[0] + user.lastName[0];
@@ -254,5 +254,49 @@ router
   }
 });
 
+router.route("/edit-video/:id").get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    try {
+      const video = await videoData.getVideoById(req.params.id);
+      const userId = req.session.AuthenticationState.user._id;
+
+      if (!video || video.owner_id.toString() !== userId) {
+        return res.status(403).send("Unauthorized");
+      }
+
+      res.render("editvideo", {
+        video,
+        user: req.session.AuthenticationState.user,
+      });
+    } catch (e) {
+      return res.status(400).redirect("/profile");
+    }
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
+
+router.route("/update-video/:id").post(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    try {
+      const videoId = req.params.id;
+      const userId = req.session.AuthenticationState.user._id;
+      const { title, description } = req.body;
+
+      const video = await videoData.getVideoById(videoId);
+      if (!video || video.owner_id.toString() !== userId) {
+        return res.status(403).send("Unauthorized");
+      }
+
+      await videoData.updateVideo(videoId, { title, description });
+
+      res.redirect("/profile");
+    } catch (e) {
+      return res.status(400).redirect("/profile");
+    }
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
 
 export default router;

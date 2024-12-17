@@ -17,4 +17,8 @@
             </div>
         </div>
     </a>
+    <!-- Edit button appears only when showEditButton is true -->
+    {{#if showEditButton}}
+        <a href="/edit-video/{{_id}}" class="edit-button">Edit</a>
+    {{/if}}
 </article>
