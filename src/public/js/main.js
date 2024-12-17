@@ -420,6 +420,72 @@
   let uploadForm = document.getElementById("upload-form");
   let commentForm = document.getElementById("comment-form");
   let searchForm = document.getElementById("search-form");
+  let editForm = document.getElementById('edit-form')
+  let collectionForm = document.getElementById('collection-form')
+  if(collectionForm){
+    let videoTitle = document.getElementById("title");
+    let videoDescription = document.getElementById("description")
+    
+    let errorDiv = document.getElementById("error-div");
+    let errorTextElement = errorDiv.getElementsByClassName("text-goes-here")[0];
+    collectionForm.addEventListener("submit", (event) => {
+      try {
+        // hide containers by default
+        errorDiv.classList.add("hidden");
+
+        // Values come from inputs as strings, no matter what :(
+        videoTitle = videoTitle.value;
+        videoDescription = videoDescription.value;
+        tagInput = tagInput.value;
+        visibility = visibility.value;
+
+
+        videoTitle = validateString(videoTitle, "video title");
+        videoDescription = validateString(videoDescription, "video description")
+        
+      } catch (e) {
+        const message = typeof e === "string" ? e : e.message;
+        event.preventDefault();
+
+        errorTextElement.textContent = message;
+        errorDiv.classList.remove("hidden");
+      }
+    });
+    }
+  if(editForm){
+    let videoTitle = document.getElementById("title");
+    let videoDescription = document.getElementById("description")
+    let tagInput = document.getElementById("tag-input")
+    let visibility = document.getElementById("visibility")
+    let errorDiv = document.getElementById("error-div");
+    let errorTextElement = errorDiv.getElementsByClassName("text-goes-here")[0];
+    editForm.addEventListener("submit", (event) => {
+      try {
+        // hide containers by default
+        errorDiv.classList.add("hidden");
+
+        // Values come from inputs as strings, no matter what :(
+        videoTitle = videoTitle.value;
+        videoDescription = videoDescription.value;
+        tagInput = tagInput.value;
+        visibility = visibility.value;
+
+
+        videoTitle = validateString(videoTitle, "video title");
+        videoDescription = validateString(videoDescription, "video description")
+        tagInput = validateString(tagInput, "tag")
+        if(visibility !== "public" && visibility !== "private"){
+            throw new Error("video visibility must be public or private")
+        }
+      } catch (e) {
+        const message = typeof e === "string" ? e : e.message;
+        event.preventDefault();
+
+        errorTextElement.textContent = message;
+        errorDiv.classList.remove("hidden");
+      }
+    });
+  }
   if (searchForm) {
     let search = document.getElementById("search");
     let errorDiv = document.getElementById("error-div");

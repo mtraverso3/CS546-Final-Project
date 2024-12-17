@@ -26,7 +26,7 @@ router
 
         // filter out videos that are private and not owned by the user
         videoList = videoList.filter((video) => {
-          return !video.private || video.owner_id.toString() === user._id;
+          return !video.private || video.owner_id.toString() === user._id.toString();
         });
 
         res.render("homepage", {
