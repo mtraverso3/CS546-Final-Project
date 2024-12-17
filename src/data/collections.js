@@ -3,7 +3,6 @@ import validation from "../utils/validation.js";
 import { bcryptConfig } from "../config/settings.js";
 import bcrypt from "bcrypt";
 
-
 const exportedMethods = {
   async getCollectionById(id) {
     id = validation.checkId(id, "ID");
@@ -18,12 +17,7 @@ const exportedMethods = {
     const collectionCollection = await collections();
     return await collectionCollection.find({ owner_id: ownerId }).toArray();
   },
-  async createCollection(
-    userId,
-    title,
-    description,
-    videos
-  ) {
+  async createCollection(userId, title, description, videos) {
     userId = validation.checkId(userId, "User ID");
     title = validation.checkString(title, "Title");
     description = validation.checkString(description, "Description");
@@ -38,10 +32,11 @@ const exportedMethods = {
       updated_at: new Date().toDateString(),
     };
     const insertInfo = await collectionsCollection.insertOne(newCollection);
-    if (insertInfo.insertedCount === 0) throw new Error("Could not add collection");
+    if (insertInfo.insertedCount === 0)
+      throw new Error("Could not add collection");
     const newId = insertInfo.insertedId;
     return await this.getCollectionById(newId.toString());
-  }
+  },
 };
 
 export default exportedMethods;

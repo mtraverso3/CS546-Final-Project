@@ -44,7 +44,7 @@ router
     try {
       req.session.user = await userData.signInUserByEmail(
         user.email,
-        user.password
+        user.password,
       );
       req.session.AuthenticationState = { user: req.session.user };
 
@@ -100,7 +100,7 @@ router
         user.enterEmail,
         user.userId,
         user.password,
-        user.dob
+        user.dob,
       );
       if (registrationCompleted) {
         return res.redirect("/intro");

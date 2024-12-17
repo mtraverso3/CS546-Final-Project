@@ -1,10 +1,17 @@
-export function validateDate(dateValue, responseType = "string", dateFormat = null) {
+export function validateDate(
+  dateValue,
+  responseType = "string",
+  dateFormat = null,
+) {
   // Validate input parameters
   if (typeof dateValue !== "string") {
     throw new Error("dateValue must be a string.");
   }
 
-  if (typeof responseType !== "string" || !["string", "boolean"].includes(responseType)) {
+  if (
+    typeof responseType !== "string" ||
+    !["string", "boolean"].includes(responseType)
+  ) {
     throw new Error("responseType must be 'string' or 'boolean'.");
   }
 
@@ -38,7 +45,7 @@ function responseSetter(responseType) {
 function daysInMonth(year, month) {
   const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-  return (month === 2 && year % 4 === 0) ? 29 : days[month - 1];
+  return month === 2 && year % 4 === 0 ? 29 : days[month - 1];
 }
 
 function getAllIndexes(arr, val) {
@@ -51,7 +58,9 @@ function getAllIndexes(arr, val) {
 }
 
 function isLeapYear(year) {
-  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) && year >= 1753;
+  return (
+    year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) && year >= 1753
+  );
 }
 
 function dateValidator(dateValue, responses, dateFormat) {
@@ -68,7 +77,9 @@ function dateValidator(dateValue, responses, dateFormat) {
 
     if (dateFormat.length > 10 || dateFormat.length < 6) return responses[0];
 
-    const formatSplit = dateValue.includes("-") ? dateFormat.split("-") : dateFormat.split("/");
+    const formatSplit = dateValue.includes("-")
+      ? dateFormat.split("-")
+      : dateFormat.split("/");
     let wrongFormat = formatSplit
       .map((formatPart) => /([dmy])\1/i.test(formatPart))
       .filter((rightFormat) => !rightFormat);
@@ -78,23 +89,27 @@ function dateValidator(dateValue, responses, dateFormat) {
     // let dateSeparator = dateValue.includes("-") ? "-" : "/";
 
     let formatRegex = new RegExp(
-      `(\\d{${formatSplit[0].length}})(${dateSeparator})(\\d{${formatSplit[1].length}})(${dateSeparator})(\\d{${formatSplit[2].length}})`
+      `(\\d{${formatSplit[0].length}})(${dateSeparator})(\\d{${formatSplit[1].length}})(${dateSeparator})(\\d{${formatSplit[2].length}})`,
     );
 
     let dayPosition = getAllIndexes(
       formatSplit,
-      formatSplit.filter((formatPart) => /[d]/i.test(formatPart))[0]
+      formatSplit.filter((formatPart) => /[d]/i.test(formatPart))[0],
     );
     let monthPosition = getAllIndexes(
       formatSplit,
-      formatSplit.filter((formatPart) => /[m]/i.test(formatPart))[0]
+      formatSplit.filter((formatPart) => /[m]/i.test(formatPart))[0],
     );
     let yearPosition = getAllIndexes(
       formatSplit,
-      formatSplit.filter((formatPart) => /[y]/i.test(formatPart))[0]
+      formatSplit.filter((formatPart) => /[y]/i.test(formatPart))[0],
     );
 
-    if (dayPosition.length !== 1 || monthPosition.length !== 1 || yearPosition.length !== 1) {
+    if (
+      dayPosition.length !== 1 ||
+      monthPosition.length !== 1 ||
+      yearPosition.length !== 1
+    ) {
       return responses[0];
     }
 

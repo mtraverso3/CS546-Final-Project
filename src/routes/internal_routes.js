@@ -19,14 +19,14 @@ router
 
         const v = await videoData.getAllVideosMatching(req.body.search);
         const v2 = await videoData.getVideoByTag(req.body.search);
-        let videoList = v.concat(v2)
+        let videoList = v.concat(v2);
         // console.log(req.session.AuthenticationState.user);
         let user = req.session.AuthenticationState.user;
         let initials = user.firstName[0] + user.lastName[0];
 
         // filter out videos that are private and not owned by the user
         videoList = videoList.filter((video) => {
-            return !video.private || video.owner_id.toString() === user._id;
+          return !video.private || video.owner_id.toString() === user._id;
         });
 
         res.render("homepage", {
@@ -70,15 +70,15 @@ router.route("/homepage").get(async (req, res) => {
         video.publishedAt = video.created_at.toDateString();
       });
 
-        // filter out videos that are private and not owned by the user
-        v = v.filter((video) => {
-            return !video.private || video.owner_id.toString() === user._id;
-        });
+      // filter out videos that are private and not owned by the user
+      v = v.filter((video) => {
+        return !video.private || video.owner_id.toString() === user._id;
+      });
 
-        // sort by likes
-        v.sort((a, b) => {
-            return b.like_count - a.like_count;
-        });
+      // sort by likes
+      v.sort((a, b) => {
+        return b.like_count - a.like_count;
+      });
 
       res.render("homepage", {
         user: req.session.AuthenticationState.user,
@@ -101,7 +101,9 @@ router.route("/profile").get(async (req, res) => {
     let user = req.session.AuthenticationState.user;
     let initials = user.firstName[0] + user.lastName[0];
     const userVideos = await videoData.getVideoByOwner(user._id);
-    const userCollections = await collectionData.getCollectionsByOwner(user._id);
+    const userCollections = await collectionData.getCollectionsByOwner(
+      user._id,
+    );
     res.render("profile", {
       user: req.session.AuthenticationState.user,
       initials: initials,
@@ -144,7 +146,7 @@ router
             username: req.body.username,
             dob: req.body.dob,
             password: req.body.newPassword,
-          }
+          },
         );
 
         const visibility = await userData.updateUserVisibilityPatch(
@@ -153,7 +155,7 @@ router
             emailPublic: req.body.emailPublic,
             namePublic: req.body.namePublic,
             profilePublic: req.body.profilePublic,
-          }
+          },
         );
       } catch (e) {
         return res.status(400).render("settings", {
@@ -225,7 +227,9 @@ router.route("/playlists/:id").get(async (req, res) => {
       user: req.session.AuthenticationState.user,
       initials: initials,
       playlist: collection.title,
-      videos: v.filter((video) => collection.videos.includes(video._id.toString())),
+      videos: v.filter((video) =>
+        collection.videos.includes(video._id.toString()),
+      ),
     });
   } else {
     return res.status(401).redirect("/intro");
@@ -296,23 +300,20 @@ router.route("/upload").get(async (req, res) => {
     return res.status(401).redirect("/intro");
   }
 });
+router.route("/upload").get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    let user = req.session.AuthenticationState.user;
+    let initials = user.firstName[0] + user.lastName[0];
+    return res.render("upload", {
+      user: req.session.AuthenticationState.user,
+      initials: initials,
+    });
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
+
 router
-  .route("/upload")
-  .get(async (req, res) => {
-    if (req.session && req.session.AuthenticationState) {
-      let user = req.session.AuthenticationState.user;
-      let initials = user.firstName[0] + user.lastName[0];
-      return res.render("upload", {
-        user: req.session.AuthenticationState.user,
-        initials: initials,
-      });
-    } else {
-      return res.status(401).redirect("/intro");
-    }
-  });
-
-
-  router
   .route("/newcollection")
   .get(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
@@ -329,22 +330,23 @@ router
     } else {
       return res.status(401).redirect("/intro");
     }
-  }).post(async (req, res) => {
+  })
+  .post(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
       let user = req.session.AuthenticationState.user;
       let initials = user.firstName[0] + user.lastName[0];
       try {
         const videos = [];
         for (const key in req.body) {
-          if (key.startsWith('cv_')) {
-            videos.push(key.slice(3)); 
+          if (key.startsWith("cv_")) {
+            videos.push(key.slice(3));
           }
         }
         const newcol = await collectionData.createCollection(
           req.session.AuthenticationState.user._id,
           req.body.title,
           req.body.description,
-          videos
+          videos,
         );
         return res.redirect("/playlists");
       } catch (e) {

@@ -3,7 +3,6 @@ import validation from "../utils/validation.js";
 import { bcryptConfig } from "../config/settings.js";
 import bcrypt from "bcrypt";
 
-
 const exportedMethods = {
   async getAllUsers() {
     const userCollection = await users();
@@ -16,14 +15,7 @@ const exportedMethods = {
     if (!user) throw new Error("User not found");
     return user;
   },
-  async createUser(
-    firstName,
-    lastName,
-    email,
-    username,
-    password,
-    dob,
-  ) {
+  async createUser(firstName, lastName, email, username, password, dob) {
     firstName = validation.checkString(firstName, "First Name");
     lastName = validation.checkString(lastName, "Last Name");
     email = validation.checkEmail(email, "Email");
@@ -38,7 +30,6 @@ const exportedMethods = {
     // Check if the email is already in use
     const emailCheck = await userCollection.findOne({ email: email });
     if (emailCheck) throw new Error("Email already in use");
-
 
     const newUser = {
       first_name: firstName,
@@ -92,21 +83,27 @@ const exportedMethods = {
         updatedUser.password,
         "Password",
       );
-      updatedUserData.password_hash = await bcrypt.hash(updatedUserData.password, bcryptConfig.saltRounds);
+      updatedUserData.password_hash = await bcrypt.hash(
+        updatedUserData.password,
+        bcryptConfig.saltRounds,
+      );
       delete updatedUserData.password;
     }
-    if (updatedUser.likedTags){
-      if(!Array.isArray(updatedUser.likedTags)){
-        throw new Error("tags must be an array")
+    if (updatedUser.likedTags) {
+      if (!Array.isArray(updatedUser.likedTags)) {
+        throw new Error("tags must be an array");
       }
-      for(let i = 0; i < updatedUser.likedTags.length; i++){
-        updatedUser.likedTags[i] = validation.checkString(updatedUser.likedTags[i], "Tag");
+      for (let i = 0; i < updatedUser.likedTags.length; i++) {
+        updatedUser.likedTags[i] = validation.checkString(
+          updatedUser.likedTags[i],
+          "Tag",
+        );
       }
     }
     if (updatedUser.dob) {
       updatedUserData.dob = validation.checkDOB(updatedUser.dob);
     }
-    
+
     updatedUserData.modified_at = new Date();
     const newUser = await userCollection.findOneAndUpdate(
       { _id: id },
@@ -163,60 +160,63 @@ const exportedMethods = {
     }
     return await this.getUserById(id.toString());
   },
-  async signUpUser (
-    firstName,
-    lastName,
-    email,
-    username,
-    password,
-    dob,
-  ) {
-    console.log("singing up user")
-    let newUser = this.createUser(firstName, lastName, email, username, password, dob)
-    return {registrationCompleted: true}
-
+  async signUpUser(firstName, lastName, email, username, password, dob) {
+    console.log("singing up user");
+    let newUser = this.createUser(
+      firstName,
+      lastName,
+      email,
+      username,
+      password,
+      dob,
+    );
+    return { registrationCompleted: true };
   },
 
-  async signInUserById (userId, password) {
-    userId = validation.checkUserId(userId)
-    userId = userId.toLowerCase()
-    password = validation.checkPassword(password)
+  async signInUserById(userId, password) {
+    userId = validation.checkUserId(userId);
+    userId = userId.toLowerCase();
+    password = validation.checkPassword(password);
     const userCollection = await users();
-    const user = await userCollection.findOne({userId: userId});
-    if(user === null){
-        throw new Error("Either the userId or password is invalid")
+    const user = await userCollection.findOne({ userId: userId });
+    if (user === null) {
+      throw new Error("Either the userId or password is invalid");
     }
-    let hash = user.password_hash
+    let hash = user.password_hash;
     let matched = await bcrypt.compare(password, hash);
-    if(!matched){
-      throw new Error("Either the userId or password is invalid")
+    if (!matched) {
+      throw new Error("Either the userId or password is invalid");
     }
-    return {firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-            dob: user.dob}
+    return {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
+      dob: user.dob,
+    };
   },
-  async signInUserByEmail (email, password) {
-    email = validation.checkEmail(email)
-    password = validation.checkPassword(password)
+  async signInUserByEmail(email, password) {
+    email = validation.checkEmail(email);
+    password = validation.checkPassword(password);
     const userCollection = await users();
-    const user = await userCollection.findOne({email: email});
-    if(user === null){
-        throw new Error("Either the email or password is invalid")
+    const user = await userCollection.findOne({ email: email });
+    if (user === null) {
+      throw new Error("Either the email or password is invalid");
     }
-    let hash = user.password_hash
+    let hash = user.password_hash;
     let matched = await bcrypt.compare(password, hash);
-    if(!matched){
-      throw new Error("Either the email or password is invalid")
+    if (!matched) {
+      throw new Error("Either the email or password is invalid");
     }
-    return {firstName: user.first_name,
+    return {
+      firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,
       username: user.username,
       _id: user._id.toString(),
-      dob: user.dob}
-  }
+      dob: user.dob,
+    };
+  },
 };
 
 export default exportedMethods;

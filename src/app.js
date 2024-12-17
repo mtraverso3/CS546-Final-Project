@@ -2,18 +2,18 @@ import express from "express";
 
 const app = express();
 import configRoutes from "./routes/index.js";
-import session from 'express-session';
+import session from "express-session";
 import exphbs from "express-handlebars";
 import "dotenv/config";
-import path from 'path';
-import {fileURLToPath} from 'url';
-import {dirname} from 'path';
-import {xss} from 'express-xss-sanitizer';
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import { xss } from "express-xss-sanitizer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-app.set('views', path.join(__dirname, 'views'));
+app.set("views", path.join(__dirname, "views"));
 
 const handlebarsInstance = exphbs.create({
   defaultLayout: "main",
@@ -30,14 +30,14 @@ const handlebarsInstance = exphbs.create({
     gt: (a, b) => a > b,
     lt: (a, b) => a < b,
     range: (start, end) => {
-        let range = [];
-        for (let i = start; i <= end; i++) {
-            range.push(i);
-        }
-        return range;
+      let range = [];
+      for (let i = start; i <= end; i++) {
+        range.push(i);
+      }
+      return range;
     },
   },
-  partialsDir: path.join(__dirname, 'views/partials'),
+  partialsDir: path.join(__dirname, "views/partials"),
 });
 
 app.use("/data", express.static(__dirname + "/../data"));
@@ -50,11 +50,11 @@ app.set("view engine", "handlebars");
 
 app.use(
   session({
-       name: 'AuthenticationState',
-       secret: "some secret string!",
-       saveUninitialized: false,
-       resave: false
-  })
+    name: "AuthenticationState",
+    secret: "some secret string!",
+    saveUninitialized: false,
+    resave: false,
+  }),
 );
 
 configRoutes(app);

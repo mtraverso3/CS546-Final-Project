@@ -72,6 +72,5 @@ const dislikeAction = async (event) => {
   }
 };
 
-
 likeForm.addEventListener("submit", likeAction);
 dislikeForm.addEventListener("submit", dislikeAction);

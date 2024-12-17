@@ -8,5 +8,5 @@ export const bcryptConfig = {
 };
 
 export const mediaConfig = {
-    uploadDir: "./data/media",
-}
+  uploadDir: "./data/media",
+};

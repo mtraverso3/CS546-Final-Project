@@ -53,7 +53,7 @@ const exportedMethods = {
     if (updatedVideo.title) {
       updatedVideoData.title = validation.checkString(
         updatedVideo.title,
-        "Title"
+        "Title",
       );
     }
 
@@ -64,7 +64,7 @@ const exportedMethods = {
       for (let i = 0; i < updatedVideo.tags.length; i++) {
         updatedVideo.tags[i] = validation.checkString(
           updatedVideo.tags[i],
-          "Tag"
+          "Tag",
         );
       }
     }
@@ -72,28 +72,28 @@ const exportedMethods = {
     if (updatedVideo.description) {
       updatedVideoData.description = validation.checkString(
         updatedVideo.description,
-        "Description"
+        "Description",
       );
     }
 
     if (updatedVideo.isPrivate) {
       updatedVideoData.private = validation.checkBoolean(
         updatedVideo.isPrivate,
-        "Private"
+        "Private",
       );
     }
 
     if (updatedVideo.whitelisted_users) {
       updatedVideoData.whitelisted_users = validation.checkStringArray(
         updatedVideo.whitelisted_users,
-        "Whitelisted Users"
+        "Whitelisted Users",
       );
     }
 
     if (updatedVideo.file_path) {
       updatedVideoData.file_path = validation.checkString(
         updatedVideo.file_path,
-        "File Path"
+        "File Path",
       );
     }
 
@@ -101,7 +101,7 @@ const exportedMethods = {
 
     const updatedInfo = await videoCollection.updateOne(
       { _id: id },
-      { $set: updatedVideoData }
+      { $set: updatedVideoData },
     );
 
     if (updatedInfo.modifiedCount === 0) {
@@ -134,7 +134,7 @@ const exportedMethods = {
     const videoCollection = await videos();
     const updatedInfo = await videoCollection.updateOne(
       { _id: videoId },
-      { $addToSet: { whitelisted_users: userId } }
+      { $addToSet: { whitelisted_users: userId } },
     );
     if (updatedInfo.modifiedCount === 0) {
       throw new Error("Could not add whitelisted user");
@@ -150,7 +150,7 @@ const exportedMethods = {
     const videoCollection = await videos();
     const updatedInfo = await videoCollection.updateOne(
       { _id: videoId },
-      { $pull: { whitelisted_users: userId } }
+      { $pull: { whitelisted_users: userId } },
     );
     if (updatedInfo.modifiedCount === 0) {
       throw new Error("Could not remove whitelisted user");
@@ -165,7 +165,7 @@ const exportedMethods = {
     const videoCollection = await videos();
     const updatedInfo = await videoCollection.updateOne(
       { _id: videoId },
-      { $set: { whitelisted_users: [] } }
+      { $set: { whitelisted_users: [] } },
     );
     if (updatedInfo.modifiedCount === 0) {
       throw new Error("Could not remove all whitelisted users");
@@ -185,15 +185,15 @@ const exportedMethods = {
   },
   async addTag(videoId, tag) {
     //TODO: verify this
-    console.log(videoId)
-    console.log(typeof videoId)
+    console.log(videoId);
+    console.log(typeof videoId);
     videoId = validation.checkId(videoId, "id");
-    console.log(typeof videoId)
+    console.log(typeof videoId);
     tag = validation.checkString(tag, "tag");
     const videoCollection = await videos();
     const updatedInfo = await videoCollection.updateOne(
       { _id: videoId },
-      { $addToSet: { tags: tag } }
+      { $addToSet: { tags: tag } },
     );
     if (updatedInfo.modifiedCount === 0) {
       throw new Error("Could not add tag");
@@ -208,7 +208,7 @@ const exportedMethods = {
     const videoCollection = await videos();
     const updatedInfo = await videoCollection.updateOne(
       { _id: videoId },
-      { $pull: { whitelisted_users: tag } }
+      { $pull: { whitelisted_users: tag } },
     );
     if (updatedInfo.modifiedCount === 0) {
       throw new Error("Could not remove tag");
@@ -223,7 +223,7 @@ const exportedMethods = {
     const videoCollection = await videos();
     const updatedInfo = await videoCollection.updateOne(
       { _id: videoId },
-      { $set: { tags: [] } }
+      { $set: { tags: [] } },
     );
     if (updatedInfo.modifiedCount === 0) {
       throw new Error("Could not remove all tags");
@@ -260,7 +260,7 @@ const exportedMethods = {
     const video = await this.getVideoById(videoId.toString());
     const updatedInfo = await videoCollection.updateOne(
       { _id: videoId },
-      { $inc: { view_count: 1 } }
+      { $inc: { view_count: 1 } },
     );
 
     if (updatedInfo.modifiedCount === 0) {
@@ -273,7 +273,7 @@ const exportedMethods = {
     tag = validation.checkString(tag, "Tag");
     const videoCollection = await videos();
     return await videoCollection.find({ tags: tag }).toArray();
-  }
+  },
 };
 
 export default exportedMethods;

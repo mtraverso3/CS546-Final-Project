@@ -1,5 +1,5 @@
 import validation from "../utils/validation.js";
-import {dislikes, likes, videos} from "../config/mongoCollections.js";
+import { dislikes, likes, videos } from "../config/mongoCollections.js";
 import { userData, videoData } from "./index.js";
 
 const exportedMethods = {
@@ -123,11 +123,11 @@ const exportedMethods = {
 
     const videoCollection = await videos();
     const updatedInfo = await videoCollection.updateOne(
-        {
-            _id: videoId,
-            dislike_count: { $gt: 0 },
-        },
-        { $inc: { dislike_count: -1 } },
+      {
+        _id: videoId,
+        dislike_count: { $gt: 0 },
+      },
+      { $inc: { dislike_count: -1 } },
     );
 
     return { dislike_count: video.dislike_count - 1 };

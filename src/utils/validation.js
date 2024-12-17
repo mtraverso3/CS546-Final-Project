@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import EmailValidator from "email-validator";
-import {validateDate} from "./validate-date.js"
+import { validateDate } from "./validate-date.js";
 
 const exportedMethods = {
   checkId(id, varName) {
@@ -90,81 +90,78 @@ const exportedMethods = {
   },
 
   checkEmail(email) {
-    email = this.checkString(email, "email")
+    email = this.checkString(email, "email");
     email = email.toLowerCase();
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if(!regex.test(email)){
-        throw new Error("Invalid email. Please enter an email in the format: john@example.com")
+    if (!regex.test(email)) {
+      throw new Error(
+        "Invalid email. Please enter an email in the format: john@example.com",
+      );
     }
     return email;
-},
-  checkUserId (userId) {
-    userId = this.checkString(userId)
-    if(userId.length > 10 || userId.length < 5){
-        throw new Error("userId must be between 5 - 10 characters")
+  },
+  checkUserId(userId) {
+    userId = this.checkString(userId);
+    if (userId.length > 10 || userId.length < 5) {
+      throw new Error("userId must be between 5 - 10 characters");
     }
-    return userId
+    return userId;
   },
   checkPassword(password) {
-    password = this.checkString(password)
-    if(password.length < 8){
-        throw "Password must be at least 8 characters long"
+    password = this.checkString(password);
+    if (password.length < 8) {
+      throw "Password must be at least 8 characters long";
     }
-    let regex1 = /[A-Z]/
-    let regex2 = /[^A-Za-z0-9]/
-    let regex3 = /\d/
-    if(!regex1.test(password)){
-        throw "Password must have at least 1 Uppercase letter"
+    let regex1 = /[A-Z]/;
+    let regex2 = /[^A-Za-z0-9]/;
+    let regex3 = /\d/;
+    if (!regex1.test(password)) {
+      throw "Password must have at least 1 Uppercase letter";
     }
-    if(!regex2.test(password)){
-        throw "Password must contain at least 1 special character"
+    if (!regex2.test(password)) {
+      throw "Password must contain at least 1 special character";
     }
-    if(!regex3.test(password)){
-        throw "Password must have at least 1 number"
+    if (!regex3.test(password)) {
+      throw "Password must have at least 1 number";
     }
-    return password
-    
+    return password;
   },
-  checkName(name){
-    name = this.checkString(name)
-    if(name.length > 25 || name.length < 2){
-        throw "name must be between 2 - 25 characters"
+  checkName(name) {
+    name = this.checkString(name);
+    if (name.length > 25 || name.length < 2) {
+      throw "name must be between 2 - 25 characters";
     }
     const regex = /\d/;
-    if(regex.test(name)){
-        throw "name cannot contain numbers"
+    if (regex.test(name)) {
+      throw "name cannot contain numbers";
     }
-    return name
+    return name;
   },
-  checkDOB(dob){
+  checkDOB(dob) {
     let validDate = validateDate(dob);
-    let currentDate = new Date()
-    let dobDate = new Date(dob)
-    let currentYear = currentDate.getFullYear()
-    let currentMonth = currentDate.getMonth() + 1
-    let currentDay = currentDate.getDate()
-    let dobSplit = dob.split("-")
-    let dobYear = Number(dobSplit[2])
-    let dobMonth = Number(dobSplit[0])
-    let dobDay = Number(dobSplit[1])
-    
+    let currentDate = new Date();
+    let dobDate = new Date(dob);
+    let currentYear = currentDate.getFullYear();
+    let currentMonth = currentDate.getMonth() + 1;
+    let currentDay = currentDate.getDate();
+    let dobSplit = dob.split("-");
+    let dobYear = Number(dobSplit[2]);
+    let dobMonth = Number(dobSplit[0]);
+    let dobDay = Number(dobSplit[1]);
+
     const diffInMilliseconds = currentDate.getTime() - dobDate.getTime();
     const ageInYears = diffInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
 
     const age = Math.floor(ageInYears);
-    console.log(age)
+    console.log(age);
 
-    if(age < 13){
-      throw "User must be at least 13 years in age"
+    if (age < 13) {
+      throw "User must be at least 13 years in age";
+    } else if (age > 120) {
+      throw "Woah there! Age must be within livible range and therefore less than 120 years old";
     }
-    else if(age > 120){
-      throw "Woah there! Age must be within livible range and therefore less than 120 years old"
-    }
-    return dob
-  }
+    return dob;
+  },
 };
-
-
-
 
 export default exportedMethods;
