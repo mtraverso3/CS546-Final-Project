@@ -1,5 +1,6 @@
 <article class="video-card">
     <a href="/watch/{{_id}}">
+
         <div class="thumbnail-container">
             <img src="data/media/{{owner_id}}/{{_id}}.png" alt="{{title}}" class="video-thumbnail">
             <span class="video-duration">{{duration}}</span>
@@ -7,7 +8,12 @@
         <div class="video-info">
             <div class="channel-avatar">{{channelInitial}}</div>
             <div class="video-details">
-                <h3 class="video-title">{{title}}</h3>
+                <h3 class="video-title">
+                    {{#if allowcheckbox}}
+                        <input type="checkbox" name="cv_{{_id}}" >
+                    {{/if}}
+                    {{title}}
+                </h3>
                 <a href="/channel/{{channelId}}" class="channel-name">{{channelName}}</a>
                 <div class="video-meta">
                     <span>{{views}} views</span>

@@ -81,10 +81,12 @@ router.route("/profile").get(async (req, res) => {
     let user = req.session.AuthenticationState.user;
     let initials = user.firstName[0] + user.lastName[0];
     const userVideos = await videoData.getVideoByOwner(user._id);
+    const userCollections = await collectionData.getCollectionsByOwner(user._id);
     res.render("profile", {
       user: req.session.AuthenticationState.user,
       initials: initials,
       videos: userVideos,
+      playlists: userCollections,
     });
   } else {
     return res.status(401).redirect("/intro");
@@ -189,6 +191,27 @@ router.route("/playlists").get(async (req, res) => {
   }
 });
 
+router.route("/playlists/:id").get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    let user = req.session.AuthenticationState.user;
+    let initials = user.firstName[0] + user.lastName[0];
+    // todo: get videos for the playlist/collection
+    const collection = await collectionData.getCollectionById(req.params.id);
+
+    const playlists = await collectionData.getCollectionsByOwner(user._id);
+    const v = await videoData.getAllVideos();
+
+    res.render("showplaylist", {
+      user: req.session.AuthenticationState.user,
+      initials: initials,
+      playlist: collection.title,
+      videos: v.filter((video) => collection.videos.includes(video._id.toString())),
+    });
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
+
 router.route("/comments").get(async (req, res) => {
   if (req.session && req.session.AuthenticationState) {
     try {
@@ -269,15 +292,19 @@ router
   });
 
 
-router
+  router
   .route("/newcollection")
   .get(async (req, res) => {
     if (req.session && req.session.AuthenticationState) {
       let user = req.session.AuthenticationState.user;
       let initials = user.firstName[0] + user.lastName[0];
+      const v = await videoData.getAllVideos();
+
       return res.render("newcollection", {
         user: req.session.AuthenticationState.user,
         initials: initials,
+        videos: v,
+        allowcheckbox: true,
       });
     } else {
       return res.status(401).redirect("/intro");
@@ -287,10 +314,17 @@ router
       let user = req.session.AuthenticationState.user;
       let initials = user.firstName[0] + user.lastName[0];
       try {
+        const videos = [];
+        for (const key in req.body) {
+          if (key.startsWith('cv_')) {
+            videos.push(key.slice(3)); 
+          }
+        }
         const newcol = await collectionData.createCollection(
           req.session.AuthenticationState.user._id,
           req.body.title,
           req.body.description,
+          videos
         );
         return res.redirect("/playlists");
       } catch (e) {

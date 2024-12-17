@@ -1,0 +1,16 @@
+<div class="app-container">
+    {{> nav}}
+    {{> sidebar}}
+    <main class="main-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+            <h1 style="color: #fff;">{{playlist}}</h1>
+        </div>
+        
+        <div class="video-grid">
+            <!-- Video Card Template -->
+            {{#each videos}}
+            {{> video-card}}
+            {{/each}}
+        </div>
+    </main>
+</div>

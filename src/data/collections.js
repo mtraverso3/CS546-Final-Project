@@ -21,7 +21,8 @@ const exportedMethods = {
   async createCollection(
     userId,
     title,
-    description
+    description,
+    videos
   ) {
     userId = validation.checkId(userId, "User ID");
     title = validation.checkString(title, "Title");
@@ -32,9 +33,9 @@ const exportedMethods = {
       title: title,
       description: description,
       owner_id: userId,
-      videos: [],
-      created_at: new Date(),
-      updated_at: new Date(),
+      videos: videos,
+      created_at: new Date().toDateString(),
+      updated_at: new Date().toDateString(),
     };
     const insertInfo = await collectionsCollection.insertOne(newCollection);
     if (insertInfo.insertedCount === 0) throw new Error("Could not add collection");

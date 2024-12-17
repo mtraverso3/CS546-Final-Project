@@ -9,9 +9,10 @@
         
         <div class="playlists-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
             {{#each playlists}}
+            <a href="/playlists/{{_id}}">
             <div class="playlist-card" style="background: rgba(21, 21, 21, 0.8); border: 1px solid #1df2f0; border-radius: 16px; overflow: hidden;">
                 <div style="position: relative; aspect-ratio: 16/9; background: #000;">
-                    <img src="{{thumbnailUrl}}" alt="{{title}}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <alt="{{title}}" style="width: 100%; height: 100%; object-fit: cover;">
                     <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border-radius: 4px;">
                         {{videoCount}} videos
                     </div>
@@ -21,6 +22,7 @@
                     <p style="color: #1df2f0; margin: 8px 0;">Last updated: {{updated_at}}</p>
                 </div>
             </div>
+            </a>
             {{/each}}
         </div>
     </main>

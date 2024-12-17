@@ -24,6 +24,13 @@
                             <span class="character-count">0/5000</span>
                         </div>
 
+                        <div class="video-grid">
+                            <!-- Video Card Template -->
+                            {{#each videos}}
+                            {{> video-card allowcheckbox=../allowcheckbox}}
+                            {{/each}}
+                        </div>                        
+
                         <div class="form-actions">
                             {{!-- <a href="/profile?tab=videos" class="upload-btn">Test Redirect</a> --}} <!-- This is to test if it actually goes to the profile-tab's video tab -->
                             <button type="submit" class="upload-btn">Create</button>
