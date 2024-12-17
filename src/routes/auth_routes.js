@@ -23,6 +23,7 @@ router
   })
   .post(async (req, res) => {
     let user = req.body;
+    
     if (!user.email || !user.password) {
       return res.status(400).render("intro", {
         title: "Sign Up",

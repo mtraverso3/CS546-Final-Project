@@ -76,6 +76,13 @@
                             <button type="submit" class="upload-btn">Upload</button>
                             <a href="/homepage" type="button" class="cancel-btn">Cancel</a>
                         </div>
+                        {{#if error}}
+                            <div class="error-message">{{error}}</div>
+                        {{/if}}
+                        <div class="hidden" id="error-div">
+                            <div class="alert alert-danger text-goes-here">
+                            </div>
+                        </div>
 
                         <!-- added for counting validation until you reach max character limit -->
                         <script>
