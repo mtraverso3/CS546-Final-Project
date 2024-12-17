@@ -14,7 +14,7 @@ const user1 = await userData.createUser(
     "alice@mail.com",
     "alice",
     "Test123$",
-    15,
+    "2003-12-12",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsCFwPvF25NroCaraLGyv0MqVbBPlDK_XX-Q&s"
 );
 
@@ -25,6 +25,7 @@ const video1 = await videoData.addVideo(
     false,
     "./673a9b36c7dac94a4cef481a/media/673af1ff4faa2440d6a3be3d.mp4"
 );
+videoData.addTag(video1._id.toString(), "dog")
 
 const user2 = await userData.createUser(
     "Bob",
@@ -32,7 +33,7 @@ const user2 = await userData.createUser(
     "bob@mail.com",
     "bob",
     "Test123$",
-    15,
+    "2003-12-12",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsCFwPvF25NroCaraLGyv0MqVbBPlDK_XX-Q&s"
 );
 
@@ -50,7 +51,7 @@ const user3 = await userData.createUser(
     "jsmith@example.com",
     "jsmith",
     "Test123$",
-    15,
+    "2003-12-12",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsCFwPvF25NroCaraLGyv0MqVbBPlDK_XX-Q&s"
 );
 

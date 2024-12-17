@@ -177,9 +177,12 @@ const exportedMethods = {
 
     return video.whitelisted_users;
   },
-  async addTag(videoId, userId) {
+  async addTag(videoId, tag) {
     //TODO: verify this
-    videoId = validation.checkId(videoId, "Video ID");
+    console.log(videoId)
+    console.log(typeof videoId)
+    videoId = validation.checkId(videoId, "id");
+    console.log(typeof videoId)
     tag = validation.checkString(tag, "tag")
     const videoCollection = await videos();
     const updatedInfo = await videoCollection.updateOne(
@@ -190,7 +193,7 @@ const exportedMethods = {
       throw new Error("Could not add tag");
     }
 
-    return await this.getVideoById(videoId);
+    return await this.getVideoById(videoId.toString());
   },
   async removeTag(videoId, tag) {
     //TODO: verify this
@@ -260,6 +263,11 @@ const exportedMethods = {
     }
 
     return { view_count: video.view_count + 1 };
+  },
+  async getVideoByTag(tag) {
+    tag = validation.checkString(tag, "Tag");
+    const videoCollection = await videos();
+    return await videoCollection.find({ tags: tag }).toArray();
   }
 };
 

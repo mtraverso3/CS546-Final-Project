@@ -14,13 +14,15 @@ router
         req.body.search = validation.checkString(req.body.search);        
 
         const v = await videoData.getAllVideosMatching(req.body.search);
+        const v2 = await videoData.getVideoByTag(req.body.search);
+        let videoList = v.concat(v2)
         // console.log(req.session.AuthenticationState.user);
         let user = req.session.AuthenticationState.user;
         let initials = user.firstName[0] + user.lastName[0];
 
         res.render("homepage", {
           user: req.session.AuthenticationState.user,
-          videos: v,
+          videos: videoList,
           initials: initials,
         });
       } catch (e) {
