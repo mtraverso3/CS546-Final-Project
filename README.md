@@ -7,6 +7,7 @@ Final Project for CS546 - Web Programming I.
 - Alice Zaytseva
 - Marcos Traverso
 - Keona Hicks
+- Megan Presbitero
 
 ## Running the Project
 
@@ -22,15 +23,18 @@ Final Project for CS546 - Web Programming I.
     ```bash
     npm install
     ```
-4. Seed the database (Optional):
+4. Run a MongoDB server on your local machine port 27017.
+
+5. Seed the database (Optional -- It doesn't work for some reason. ONLY fails when seeded):
     ```bash
     npm run seed
     ```
-5. Start the server:
+   Alternatively, run through the application to seed the database. Videos have been provided in the src/tasks/seedData folder.
+6. Start the server:
     ```bash
     npm start
     ```
-6. Navigate to `http://localhost:3000/` in your web browser to view the project.
+7. Navigate to `http://localhost:3000/` in your web browser to view the project.
 
 ## Testing the Project
 

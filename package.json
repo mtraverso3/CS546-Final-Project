@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/app.js",
+    "seed": "node src/tasks/seed.js",
     "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
     "format": "prettier --write \"src/**/*.{js,jsx}\""
   },

@@ -16,19 +16,23 @@ const middlewares = {
   },
   async videoOwnerOnlyIfPrivate(req, res, next) {
     // if the video_id is private, only the owner can view it
-    if (req.session && req.session.AuthenticationState) {
-      const video = await videoData.getVideoById(req.params.id);
-      if (video.private === false) {
-        return next();
-      } else if (
-        req.session.AuthenticationState.user._id === video.owner_id.toString()
-      ) {
-        return next();
+    try {
+      if (req.session && req.session.AuthenticationState) {
+        const video = await videoData.getVideoById(req.params.id);
+        if (video.private === false) {
+          return next();
+        } else if (
+          req.session.AuthenticationState.user._id === video.owner_id.toString()
+        ) {
+          return next();
+        } else {
+          return res.status(401).redirect("/intro");
+        }
       } else {
         return res.status(401).redirect("/intro");
       }
-    } else {
-      return res.status(401).redirect("/intro");
+    } catch (e) {
+      return res.status(404).redirect("/intro");
     }
   },
 };
