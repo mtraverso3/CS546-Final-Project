@@ -491,6 +491,7 @@ html, body {
 }
 
 .profile-button {
+    text-decoration: none;
     padding: 0;
     border: none;
     background: none;
@@ -498,6 +499,7 @@ html, body {
 }
 
 .profile-avatar {
+    text-decoration: none;
     width: 42px;
     height: 42px;
     background: linear-gradient(45deg, #1df2f0, #E94BE8);

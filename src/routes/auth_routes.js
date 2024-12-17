@@ -22,12 +22,12 @@ router
   })
   .post(async (req, res) => {
     let user = req.body;
-    
+
     if (!user.email || !user.password) {
       return res.status(400).render("intro", {
         title: "Sign Up",
         layout: "sign_up_layout",
-        error: "email and password must be supplied"
+        error: "email and password must be supplied",
       });
     }
 
@@ -44,7 +44,7 @@ router
     try {
       req.session.user = await userData.signInUserByEmail(
         user.email,
-        user.password,
+        user.password
       );
       req.session.AuthenticationState = { user: req.session.user };
 
@@ -54,7 +54,7 @@ router
         title: "Sign Up",
         layout: "sign_up_layout",
         error: e.message,
-      });      
+      });
     }
   });
 
@@ -70,7 +70,7 @@ router
     }
   })
   .post(async (req, res) => {
-    let user = req.body
+    let user = req.body;
     try {
       user.firstName = validation.checkName(user.firstName);
       user.lastName = validation.checkName(user.lastName);
@@ -80,9 +80,9 @@ router
       console.log(user.enterEmail);
       user.enterEmail = validation.checkEmail(user.enterEmail);
       user.confirmPassword = validation.checkPassword(user.confirmPassword);
-      console.log(user.dob)
-      user.dob = validation.checkDOB(user.dob)
-      console.log(user.dob)
+      console.log(user.dob);
+      user.dob = validation.checkDOB(user.dob);
+      console.log(user.dob);
       if (user.password !== user.confirmPassword)
         throw new Error("Error: Passwords do not match");
     } catch (e) {
@@ -100,7 +100,7 @@ router
         user.enterEmail,
         user.userId,
         user.password,
-        user.dob,
+        user.dob
       );
       if (registrationCompleted) {
         return res.redirect("/intro");
@@ -124,5 +124,19 @@ router
   .get(async (req, res) => {
     return res.redirect("/intro");
   });
+
+router.route("/profile").get(async (req, res) => {
+  if (req.session && req.session.AuthenticationState) {
+    let user = req.session.AuthenticationState.user;
+    let initials = user.firstName[0] + user.lastName[0];
+
+    res.render("profile", {
+      user: req.session.AuthenticationState.user,
+      initials: initials,
+    });
+  } else {
+    return res.status(401).redirect("/intro");
+  }
+});
 
 export default router;
