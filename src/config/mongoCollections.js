@@ -20,3 +20,4 @@ export const videos = getCollectionFn("videos");
 export const users = getCollectionFn("users");
 export const comments = getCollectionFn("comments");
 export const videoRatings = getCollectionFn("videoRatings");
+export const collections = getCollectionFn("collections");

@@ -1,0 +1,98 @@
+<div class="app-container">
+    {{> nav}}
+    {{> sidebar}}
+    
+    <main class="main-content">
+        <div class="upload-container">
+            <h1 class="page-title">Create Playlist</h1>
+            
+            <div class="collection-wrapper">
+                <form id="collection-form" method="POST" action="/newcollection">
+                    <!-- details abt the video -->
+                    <div class="collection-details">
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" name="title" required maxlength="100" 
+                                   placeholder="Add a title that describes your playlist">
+                            <span class="character-count">0/100</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" rows="4" maxlength="5000"
+                                    placeholder="Tell viewers about your collection"></textarea>
+                            <span class="character-count">0/5000</span>
+                        </div>
+
+                        <div class="form-actions">
+                            {{!-- <a href="/profile?tab=videos" class="upload-btn">Test Redirect</a> --}} <!-- This is to test if it actually goes to the profile-tab's video tab -->
+                            <button type="submit" class="upload-btn">Create</button>
+                            <a href="/playlists" type="button" class="cancel-btn">Cancel</a>
+                        </div>
+
+
+
+                        <!-- added for counting validation until you reach max character limit -->
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                // char count functionality
+                                const titleInput = document.getElementById('title');
+                                const titleCount = titleInput.parentElement.querySelector('.character-count');
+                                
+                                const descInput = document.getElementById('description');
+                                const descCount = descInput.parentElement.querySelector('.character-count');
+                                
+                                function updateCharCount(input, display, maxLength) {
+                                    input.addEventListener('input', function() {
+                                        const currentLength = this.value.length;
+                                        display.textContent = `${currentLength}/${maxLength}`;
+                                        
+                                        if (currentLength >= maxLength) {
+                                            display.style.color = '#ff4444';
+                                            if (currentLength > maxLength) {
+                                                this.value = this.value.slice(0, maxLength);
+                                            }
+                                        } else if (currentLength >= maxLength * 0.9) {
+                                            display.style.color = '#ffaa44';
+                                        } else {
+                                            display.style.color = '#00ff99';
+                                        }
+                                    });
+                                }
+
+                                // counters
+                                updateCharCount(titleInput, titleCount, 100);
+                                updateCharCount(descInput, descCount, 5000);
+
+                                // view preview functions
+                                const videoInput = document.getElementById('video-input');
+                                const videoPreview = document.getElementById('video-preview');
+                                const uploadPreview = document.getElementById('upload-preview');
+                                const uploadPlaceholder = document.querySelector('.upload-placeholder');
+
+                                videoInput.addEventListener('change', function(e) {
+                                    const file = e.target.files[0];
+                                    if (file) {
+                                        const videoUrl = URL.createObjectURL(file);
+                                        videoPreview.src = videoUrl;
+                                        uploadPreview.style.display = 'block';
+                                        uploadPlaceholder.style.display = 'none';
+                                    }
+                                });
+
+                                const changeVideoBtn = document.querySelector('.change-video-btn');
+                                changeVideoBtn.addEventListener('click', function() {
+                                    videoInput.value = '';
+                                    videoPreview.src = '';
+                                    uploadPreview.style.display = 'none';
+                                    uploadPlaceholder.style.display = 'block';
+                                });
+
+                            });
+                        </script>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
