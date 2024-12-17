@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userData, videoData } from "../data/index.js";
+import { collectionData, userData, videoData } from "../data/index.js";
 import validation from "../utils/validation.js";
 import multer from "multer";
 import path from "path";
@@ -172,9 +172,9 @@ router.route("/following").get(async (req, res) => {
 router.route("/playlists").get(async (req, res) => {
   if (req.session && req.session.AuthenticationState) {
     try {
-      const playlists = [];
       let user = req.session.AuthenticationState.user;
       let initials = user.firstName[0] + user.lastName[0];
+      const playlists = await collectionData.getCollectionsByOwner(user._id);
 
       res.render("playlists", {
         user: req.session.AuthenticationState.user,
@@ -253,6 +253,56 @@ router.route("/upload").get(async (req, res) => {
     return res.status(401).redirect("/intro");
   }
 });
+router
+  .route("/upload")
+  .get(async (req, res) => {
+    if (req.session && req.session.AuthenticationState) {
+      let user = req.session.AuthenticationState.user;
+      let initials = user.firstName[0] + user.lastName[0];
+      return res.render("upload", {
+        user: req.session.AuthenticationState.user,
+        initials: initials,
+      });
+    } else {
+      return res.status(401).redirect("/intro");
+    }
+  });
+
+
+router
+  .route("/newcollection")
+  .get(async (req, res) => {
+    if (req.session && req.session.AuthenticationState) {
+      let user = req.session.AuthenticationState.user;
+      let initials = user.firstName[0] + user.lastName[0];
+      return res.render("newcollection", {
+        user: req.session.AuthenticationState.user,
+        initials: initials,
+      });
+    } else {
+      return res.status(401).redirect("/intro");
+    }
+  }).post(async (req, res) => {
+    if (req.session && req.session.AuthenticationState) {
+      let user = req.session.AuthenticationState.user;
+      let initials = user.firstName[0] + user.lastName[0];
+      try {
+        const newcol = await collectionData.createCollection(
+          req.session.AuthenticationState.user._id,
+          req.body.title,
+          req.body.description,
+        );
+        return res.redirect("/playlists");
+      } catch (e) {
+        return res.status(400).render("newcollection", {
+          user: req.session.AuthenticationState.user,
+          initials: initials,
+        });
+      }
+    } else {
+      return res.status(401).redirect("/intro");
+    }
+  });
 
 router.route("/edit-video/:id").get(async (req, res) => {
   if (req.session && req.session.AuthenticationState) {

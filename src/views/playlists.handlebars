@@ -4,21 +4,21 @@
     <main class="main-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
             <h1 style="color: #fff;">Your Playlists</h1>
-            <button style="background: linear-gradient(45deg, #1df2f0, #E94BE8); color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer;">Create Playlist</button>
+            <a href="/newcollection"><button style="background: linear-gradient(45deg, #1df2f0, #E94BE8); color: white; border: none; padding: 12px 24px; border-radius: 12px; cursor: pointer;">Create Playlist</button></a>
         </div>
         
         <div class="playlists-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
             {{#each playlists}}
             <div class="playlist-card" style="background: rgba(21, 21, 21, 0.8); border: 1px solid #1df2f0; border-radius: 16px; overflow: hidden;">
                 <div style="position: relative; aspect-ratio: 16/9; background: #000;">
-                    <img src="{{thumbnailUrl}}" alt="{{name}}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="{{thumbnailUrl}}" alt="{{title}}" style="width: 100%; height: 100%; object-fit: cover;">
                     <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border-radius: 4px;">
                         {{videoCount}} videos
                     </div>
                 </div>
                 <div style="padding: 16px;">
-                    <h3 style="color: #fff; margin: 0;">{{name}}</h3>
-                    <p style="color: #1df2f0; margin: 8px 0;">Last updated: {{lastUpdated}}</p>
+                    <h3 style="color: #fff; margin: 0;">{{title}}</h3>
+                    <p style="color: #1df2f0; margin: 8px 0;">Last updated: {{updated_at}}</p>
                 </div>
             </div>
             {{/each}}
