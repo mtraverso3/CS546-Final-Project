@@ -418,6 +418,8 @@
     let searchForm = document.getElementById('search-form')
     if(searchForm){
         let search = document.getElementById('search')
+        let errorDiv = document.getElementById('error-div');
+        let errorTextElement = errorDiv.getElementsByClassName('text-goes-here')[0];
         searchForm.addEventListener('submit', (event) => {
   
             try {
@@ -442,6 +444,8 @@
     }
     if(commentForm){
         let comment = document.getElementById('comment')
+        let errorDiv = document.getElementById('error-div');
+        let errorTextElement = errorDiv.getElementsByClassName('text-goes-here')[0];
         commentForm.addEventListener('submit', (event) => {
   
             try {
