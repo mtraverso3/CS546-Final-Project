@@ -8,6 +8,7 @@ import "dotenv/config";
 import path from 'path';
 import {fileURLToPath} from 'url';
 import {dirname} from 'path';
+import {xss} from 'express-xss-sanitizer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,6 +43,7 @@ const handlebarsInstance = exphbs.create({
 app.use("/data", express.static(__dirname + "/../data"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(xss());
 
 app.engine("handlebars", handlebarsInstance.engine);
 app.set("view engine", "handlebars");

@@ -24,6 +24,11 @@ router
         let user = req.session.AuthenticationState.user;
         let initials = user.firstName[0] + user.lastName[0];
 
+        // filter out videos that are private and not owned by the user
+        videoList = videoList.filter((video) => {
+            return !video.private || video.owner_id.toString() === user._id;
+        });
+
         res.render("homepage", {
           user: req.session.AuthenticationState.user,
           videos: videoList,
@@ -53,7 +58,7 @@ router
 router.route("/homepage").get(async (req, res) => {
   if (req.session && req.session.AuthenticationState) {
     try {
-      const v = await videoData.getAllVideos();
+      let v = await videoData.getAllVideos();
       const page = parseInt(req.query.page || "1", 10);
       const totalPages = Math.ceil(v.length / PAGE_SIZE);
       const startIndex = (page - 1) * PAGE_SIZE;
@@ -64,6 +69,16 @@ router.route("/homepage").get(async (req, res) => {
       v.forEach((video) => {
         video.publishedAt = video.created_at.toDateString();
       });
+
+        // filter out videos that are private and not owned by the user
+        v = v.filter((video) => {
+            return !video.private || video.owner_id.toString() === user._id;
+        });
+
+        // sort by likes
+        v.sort((a, b) => {
+            return b.like_count - a.like_count;
+        });
 
       res.render("homepage", {
         user: req.session.AuthenticationState.user,

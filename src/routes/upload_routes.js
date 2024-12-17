@@ -5,18 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 import multer from "multer";
 import path from "path";
+import middlewares from "../utils/middleware.js";
 
 const router = Router();
-
-//middleware to ensure user is logged i
-const ensureAuthenticated = (req, res, next) => {
-  console.log(req.session);
-  if (req.session && req.session.AuthenticationState) {
-    return next();
-  } else {
-    return res.status(401).redirect("/intro");
-  }
-};
 
 //middleware to upload file, keeps original extension, and renames/puts the upload in "data/uploads/user_id/uuidv4.extension"
 const storage = multer.diskStorage({
@@ -30,7 +21,7 @@ const storage = multer.diskStorage({
   },
 });
 
-router.get("/", ensureAuthenticated, async (req, res) => {
+router.get("/", middlewares.ensureAuthenticated, async (req, res) => {
   return res.render("upload", {
     user: req.session.user,
   });
@@ -39,7 +30,7 @@ router.get("/", ensureAuthenticated, async (req, res) => {
 // two files, "video" and "thumbnail"
 router.post(
   "/",
-  ensureAuthenticated,
+  middlewares.ensureAuthenticated,
   multer({ storage: storage }).fields([
     {
       name: "video",
@@ -54,7 +45,7 @@ router.post(
           req.session.user._id,
           req.body.title,
           req.body.description,
-          req.body.visibility === "private"
+          req.body.visibility === "private",
         );
 
         if (!video) throw new Error("Could not add video");
@@ -77,7 +68,7 @@ router.post(
     } else {
       return res.status(400).redirect("/profile");
     }
-  }
+  },
 );
 
 export default router;

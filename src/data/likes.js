@@ -121,6 +121,15 @@ const exportedMethods = {
       );
     }
 
+    const videoCollection = await videos();
+    const updatedInfo = await videoCollection.updateOne(
+        {
+            _id: videoId,
+            dislike_count: { $gt: 0 },
+        },
+        { $inc: { dislike_count: -1 } },
+    );
+
     return { dislike_count: video.dislike_count - 1 };
   },
   async getLikesCount(videoId) {

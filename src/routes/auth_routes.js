@@ -3,7 +3,6 @@ import { Router } from "express";
 const router = Router();
 import validation from "../utils/validation.js";
 import userData from "../data/users.js";
-import xss from 'xss';
 
 router.route("/").get(async (req, res) => {
   return res.redirect("/intro");
