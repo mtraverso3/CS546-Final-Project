@@ -24,15 +24,31 @@
                         </div>
                         
                         <div class="video-actions">
-                            <button class="action-btn">
-                                <span class="likes-count">{{video.like_count}}</span>
-                                Like
-                            </button>
-                            <button class="action-btn">
-                                <span class="dislikes-count">{{video.dislike_count}}</span>
-                                Dislike
-                            </button>
-                            <button class="action-btn">Share</button>
+<!--                            instead we use forms and POST to /watch/like/:id or /watch/unlike/:id or /watch/dislike/:id or /watch/undislike/:id-->
+                            <form id="like-form" method="POST" action="/watch/like/{{video._id}}">
+                                <button type="submit" class="action-btn">
+                                    <span class="likes-count">{{video.like_count}}</span>
+                                    Like
+                                </button>
+                            </form>
+                            <form id="dislike-form" method="POST" action="/watch/dislike/{{video._id}}">
+                                <button type="submit" class="action-btn">
+                                    <span class="dislikes-count">{{video.dislike_count}}</span>
+                                    Dislike
+                                </button>
+                            </form>
+<!--                            download video button-->
+
+
+<!--                            <button class="action-btn">-->
+<!--                                <span class="likes-count">{{video.like_count}}</span>-->
+<!--                                Like-->
+<!--                            </button>-->
+<!--                            <button class="action-btn">-->
+<!--                                <span class="dislikes-count">{{video.dislike_count}}</span>-->
+<!--                                Dislike-->
+<!--                            </button>-->
+<!--                            <button class="action-btn">Share</button>-->
                         </div>
                     </div>
 
@@ -119,3 +135,5 @@
         </div>
     </main>
 </div>
+
+<script src="/public/js/watch.js"></script>
