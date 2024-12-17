@@ -60,6 +60,11 @@ router.route("/homepage").get(async (req, res) => {
       const endIndex = startIndex + PAGE_SIZE;
       let user = req.session.AuthenticationState.user;
       let initials = user.firstName[0] + user.lastName[0];
+
+      v.forEach((video) => {
+        video.publishedAt = video.created_at.toDateString();
+      });
+
       res.render("homepage", {
         user: req.session.AuthenticationState.user,
         initials: initials,
