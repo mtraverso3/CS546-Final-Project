@@ -7,7 +7,7 @@ Final Project for CS546 - Web Programming I.
 - Alice Zaytseva
 - Marcos Traverso
 - Keona Hicks
-- Megan Presbitero
+- Meg Presbitero
 
 ## Running the Project
 
